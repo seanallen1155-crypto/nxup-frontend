@@ -45,3 +45,17 @@
     font-family: "Manrope Variable", "Inter Variable", system-ui, sans-serif;
   }
 }
+
+@keyframes streak {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateX(150%) skewX(-20deg);
+    opacity: 0;
+  }
+}

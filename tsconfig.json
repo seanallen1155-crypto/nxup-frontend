@@ -15,7 +15,8 @@
     "paths": {
       "theme": ["./theme.ts"],
       "@/typography": ["./src/components/ui/typography.tsx"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@/icons/*": ["public/icons/*"]
     },
 
     "types": ["node", "tailwindcss"],

@@ -1,4 +1,3 @@
-// src/app/splash/page.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -11,7 +10,7 @@ export default function SplashPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push("/auth");
+      router.push("/auth/simple");  // 👈 now routes to MVP login/signup
     }, 2000);
     return () => clearTimeout(timer);
   }, [router]);

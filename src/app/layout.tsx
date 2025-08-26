@@ -1,12 +1,7 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
-
-// ✅ Fonts (Manrope + Inter from Google)
 import { Manrope, Inter } from "next/font/google";
-
-// ✅ NXUP Theme (import ensures tree-shaking includes theme tokens)
-import { nxupTheme } from "theme";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -39,7 +34,7 @@ export default function RootLayout({
       <body
         className="
           bg-background 
-          text-body        /* ✅ default body font size + color */
+          text-body 
           antialiased 
           font-sans
         "

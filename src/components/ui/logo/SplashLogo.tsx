@@ -8,8 +8,8 @@ export default function SplashLogo() {
   return (
     <motion.div
       className="flex flex-col items-center"
-      initial={{ opacity: 0, scale: 0.9, y: 40 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       {/* Logo */}
@@ -24,8 +24,8 @@ export default function SplashLogo() {
 
       {/* Tagline */}
       <motion.p
-        className="text-white text-xl md:text-2xl font-semibold text-center mt-1 leading-none"
-        initial={{ opacity: 0, y: 10 }}
+        className="text-white text-xl md:text-2xl font-semibold text-center leading-none mt-2"
+        initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
       >

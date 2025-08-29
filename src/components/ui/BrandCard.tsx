@@ -10,7 +10,6 @@ type BrandCardProps = {
   lastName?: string;
   classYear?: string;
   hometown?: string;
-  age?: string | number;
   score?: number;
 };
 
@@ -18,11 +17,13 @@ export default function BrandCard({
   imageSrc,
   firstName = "your first name",
   lastName = "LAST NAME",
-  classYear = "202X",
-  hometown = "Hometown",
-  age = "—",
+  classYear = "Your Class Year",
+  hometown = "Your Hometown",
   score = 0,
 }: BrandCardProps) {
+  const isPlaceholderYear = classYear === "Your Class Year";
+  const isPlaceholderHometown = hometown === "Your Hometown";
+
   return (
     <div
       className="relative mx-auto w-full max-w-[calc(100%-32px)] 
@@ -66,13 +67,9 @@ export default function BrandCard({
           </span>
 
           <div className="mt-3 space-y-1 text-xs sm:text-[14px] text-white/75">
-            <div>Class of {classYear}</div>
-            <div>
-              <span className="font-semibold text-white">Hometown:</span>{" "}
+            <div className={isPlaceholderYear ? "italic" : ""}>{classYear}</div>
+            <div className={isPlaceholderHometown ? "italic" : ""}>
               {hometown}
-            </div>
-            <div>
-              <span className="font-semibold text-white">Age:</span> {age}
             </div>
           </div>
         </div>

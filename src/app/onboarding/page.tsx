@@ -1,17 +1,13 @@
-// src/app/onboarding/name/page.tsx
 "use client";
 
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import OnboardingLayout from "@/components/ui/OnboardingLayout";
 import BrandCard from "@/components/ui/BrandCard";
-import { Button } from "@/components/ui/button";
 import { useOnboardingStore } from "@/store/onboardingStore";
 import { AnimatedFirst, AnimatedLast } from "@/components/ui/AnimatedName";
+import { Button } from "@/components/ui/button";
+import { useState, useRef } from "react";
 
-export default function OnboardingNamePage() {
-  const router = useRouter();
-
+export default function OnboardingPage() {
   const {
     firstName,
     lastName,
@@ -40,8 +36,13 @@ export default function OnboardingNamePage() {
     setError("");
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      router.push("/onboarding/birthday"); // ✅ client-side navigation
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log("Name step complete ✅", {
+        firstName,
+        lastName,
+        nickname,
+      });
+      // For now, stop here (no birthday/location yet)
     } catch {
       setError("Something went wrong. Try again.");
     } finally {
@@ -56,9 +57,7 @@ export default function OnboardingNamePage() {
           {/* Card */}
           <div className="flex justify-center">
             <BrandCard
-              firstName={
-                <AnimatedFirst firstName={firstName} nickname={nickname} />
-              }
+              firstName={<AnimatedFirst firstName={firstName} nickname={nickname} />}
               lastName={<AnimatedLast lastName={lastName} />}
             />
           </div>

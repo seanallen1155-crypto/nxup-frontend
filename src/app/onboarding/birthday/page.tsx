@@ -4,270 +4,234 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import OnboardingLayout from "@/components/ui/OnboardingLayout";
-import OnboardingProgress from "@/components/ui/OnboardingProgress";
-import PulseWrapper from "@/components/ui/PulseWrapper";
-import { Bebas_Neue, Inter } from "next/font/google";
+import BrandCard from "@/components/ui/BrandCard";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
+import { useOnboardingStore } from "@/store/onboardingStore";
+import { AnimatedFirst, AnimatedLast } from "@/components/ui/AnimatedName";
 
-const bebas = Bebas_Neue({ subsets: ["latin"], weight: "400" });
-const inter = Inter({ subsets: ["latin"], weight: "500" });
+const SCHOOL_YEAR_START = { month: 8, day: 1 };
+const GRADE_MIN = 6;
+const GRADE_MAX = 12;
 
 export default function OnboardingBirthdayPage() {
   const router = useRouter();
+  const { firstName, lastName, nickname, dob, grade, setDob, setGrade } =
+    useOnboardingStore();
 
-  // DOB segmented fields
-  const [month, setMonth] = useState("");
-  const [day, setDay] = useState("");
-  const [year, setYear] = useState("");
+  const [month, setMonth] = useState(dob?.month || "");
+  const [day, setDay] = useState(dob?.day || "");
+  const [year, setYear] = useState(dob?.year || "");
+  const [warning, setWarning] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const monthRef = useRef<HTMLInputElement>(null);
   const dayRef = useRef<HTMLInputElement>(null);
   const yearRef = useRef<HTMLInputElement>(null);
 
-  const [grade, setGrade] = useState("");
-  const [error, setError] = useState("");
-  const [blocked, setBlocked] = useState<"tooYoung" | "college" | "middleschool" | null>(null);
+  // upcoming school year calc
+  const today = new Date();
+  const cutoff = new Date(
+    today.getFullYear(),
+    SCHOOL_YEAR_START.month - 1,
+    SCHOOL_YEAR_START.day
+  );
+  const upcomingYear = today < cutoff ? today.getFullYear() : today.getFullYear() + 1;
+  const classOf = grade ? upcomingYear + (12 - grade) : null;
 
-  const pad2 = (val: string) => (val.length === 1 ? `0${val}` : val);
-
-  const buildDob = () => {
-    if (!month || !day || !year) return null;
-    return `${pad2(month)}/${pad2(day)}/${year}`;
+  const isValidDate = (m: string, d: string, y: string) => {
+    if (!m || !d || !y) return false;
+    const mm = parseInt(m, 10);
+    const dd = parseInt(d, 10);
+    const yyyy = parseInt(y, 10);
+    if (yyyy < 1900 || yyyy > 2100) return false;
+    const date = new Date(yyyy, mm - 1, dd);
+    return (
+      date.getMonth() + 1 === mm &&
+      date.getDate() === dd &&
+      date.getFullYear() === yyyy
+    );
   };
 
-  const calculateAge = () => {
-    const dobStr = buildDob();
-    if (!dobStr) return null;
-    const [mm, dd, yyyy] = dobStr.split("/").map(Number);
-    const today = new Date();
-    const birthDate = new Date(yyyy, mm - 1, dd);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  };
-
-  const handleNext = () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError("");
-    const age = calculateAge();
-
-    if (!age || !grade) return;
-
-    // ❌ Under 13
-    if (age < 13) {
-      setBlocked("tooYoung");
+    if (!grade) {
+      setError("Select your upcoming grade.");
       return;
     }
-
-    // ❌ Grade mismatch with age
-    if (
-      (grade === "9th" && (age < 13 || age > 16)) ||
-      (grade === "10th" && (age < 14 || age > 17)) ||
-      (grade === "11th" && (age < 15 || age > 18)) ||
-      (grade === "12th" && (age < 16 || age > 19))
-    ) {
-      setError("That doesn’t look right. Please double-check your birthday and grade.");
+    if ((month || day || year) && !isValidDate(month, day, year)) {
+      setError("Please enter a real date (MM DD YYYY).");
       return;
     }
-
-    // ❌ College or Other
-    if (grade === "College" || grade === "Other") {
-      setBlocked("college");
-      return;
-    }
-
-    // ❌ 7th or 8th grade (but age ≥13)
-    if (grade === "7th" || grade === "8th") {
-      setBlocked("middleschool");
-      return;
-    }
-
-    // ✅ Normal high school path
-    router.push("/onboarding/school");
+    setDob({ month, day, year });
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    setLoading(false);
+    router.push("/onboarding/first-play");
   };
 
-  // 🚫 Blocked States
-  if (blocked === "tooYoung") {
-    return (
-      <OnboardingLayout>
-        <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center space-y-4">
-          <h1 className={`${bebas.className} text-white text-4xl`}>You’re Too Young to Join</h1>
-          <p className="text-white/80 text-base">
-            We can only support athletes 13+ at this time. Keep playing hard — we’ll be here when you’re ready.
-          </p>
-        </div>
-      </OnboardingLayout>
-    );
-  }
+  const handleAutoAdvance = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: (val: string) => void,
+    nextRef?: React.RefObject<HTMLInputElement>,
+    maxLength?: number
+  ) => {
+    let val = e.target.value.replace(/\D/g, "");
+    if (maxLength && val.length > maxLength) val = val.slice(0, maxLength);
+    setter(val);
+    if (maxLength && val.length === maxLength && nextRef?.current) {
+      nextRef.current.focus();
+    }
+  };
 
-  if (blocked === "college") {
-    return (
-      <OnboardingLayout>
-        <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center space-y-4">
-          <h1 className={`${bebas.className} text-white text-4xl`}>
-            Right now we only support high school athletes.
-          </h1>
-          <p className="text-white/80 text-base">
-            We’ll notify you when college athletes can join.
-          </p>
-          <button
-            onClick={() => router.push("/waitlist")}
-            className="mt-6 w-full py-4 rounded-xl font-bold text-lg shadow-lg
-                       bg-gradient-to-r from-[#006DFF] to-[#6C63FF] text-white"
-          >
-            Join Waitlist →
-          </button>
-        </div>
-      </OnboardingLayout>
-    );
-  }
+  const handleBackspace = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    prevRef?: React.RefObject<HTMLInputElement>
+  ) => {
+    if (
+      e.key === "Backspace" &&
+      (e.currentTarget as HTMLInputElement).selectionStart === 0
+    ) {
+      prevRef?.current?.focus();
+    }
+  };
 
-  if (blocked === "middleschool") {
-    return (
-      <OnboardingLayout>
-        <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center space-y-4">
-          <h1 className={`${bebas.className} text-white text-4xl`}>High School Only (for now)</h1>
-          <p className="text-white/80 text-base">
-            We’re currently built for high school athletes. Stay tuned — middle school support is coming.
-          </p>
-          <button
-            onClick={() => router.push("/waitlist")}
-            className="mt-6 w-full py-4 rounded-xl font-bold text-lg shadow-lg
-                       bg-gradient-to-r from-[#006DFF] to-[#6C63FF] text-white"
-          >
-            Join Waitlist →
-          </button>
-        </div>
-      </OnboardingLayout>
-    );
-  }
-
-  // ✅ Normal Page
   return (
     <OnboardingLayout>
-      <div className="flex flex-col min-h-screen px-6 py-6">
-        {/* Progress Tracker */}
-        <div className="flex justify-center pt-6 pb-2">
-          <OnboardingProgress currentStep={3} totalSteps={6} />
-        </div>
-
-        {/* Headline + Subheadline */}
-        <div className="mb-6">
-          <h1 className={`${bebas.className} text-white text-5xl drop-shadow-lg`}>
-            When’s Your Birthday?
-          </h1>
-          <p className={`${inter.className} text-white/80 text-base mt-2`}>
-            We use this to confirm you’re in high school and eligible for NIL.
-          </p>
-          <p className="text-xs text-white/60 mt-1">
-            We only use your birthday and grade to confirm eligibility. This info is never shown publicly.
-          </p>
-        </div>
-
-        {/* Form Fields */}
-        <div className="space-y-4">
-          {/* Segmented DOB */}
-          <div>
-            <label className="block text-white/80 text-sm mb-1">Date of Birth</label>
-            <div className="flex space-x-2">
-              <input
-                ref={monthRef}
-                type="tel"
-                maxLength={2}
-                placeholder="MM"
-                value={month}
-                onChange={(e) => {
-                  setMonth(e.target.value.replace(/\D/g, ""));
-                  if (e.target.value.length === 2) dayRef.current?.focus();
-                }}
-                className="w-16 px-3 py-3 rounded-xl text-center
-                           bg-white/10 backdrop-blur-md border border-white/20
-                           text-white font-bold placeholder-gray-500
-                           focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                ref={dayRef}
-                type="tel"
-                maxLength={2}
-                placeholder="DD"
-                value={day}
-                onChange={(e) => {
-                  setDay(e.target.value.replace(/\D/g, ""));
-                  if (e.target.value.length === 2) yearRef.current?.focus();
-                }}
-                className="w-16 px-3 py-3 rounded-xl text-center
-                           bg-white/10 backdrop-blur-md border border-white/20
-                           text-white font-bold placeholder-gray-500
-                           focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                ref={yearRef}
-                type="tel"
-                maxLength={4}
-                placeholder="YYYY"
-                value={year}
-                onChange={(e) => setYear(e.target.value.replace(/\D/g, ""))}
-                className="w-24 px-3 py-3 rounded-xl text-center
-                           bg-white/10 backdrop-blur-md border border-white/20
-                           text-white font-bold placeholder-gray-500
-                           focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
+      <div className="-mx-6">
+        <div className="flex flex-col min-h-[100svh] pt-[env(safe-area-inset-top,44px)] pb-[env(safe-area-inset-bottom,24px)]">
+          {/* Card */}
+          <div className="flex justify-center">
+            <BrandCard
+              firstName={<AnimatedFirst firstName={firstName} nickname={nickname} />}
+              lastName={<AnimatedLast lastName={lastName} />}
+              classYear={
+                <motion.span
+                  key={classOf ?? "placeholder"}
+                  initial={{ opacity: 0.6, scale: 1.06 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.2 }}
+                  className={`inline-block leading-tight ${
+                    classOf
+                      ? "text-[#C6FF45] font-light text-[clamp(18px,4vw,24px)]"
+                      : "text-white italic font-light text-[clamp(18px,4vw,24px)]"
+                  }`}
+                >
+                  {classOf ? `Class of ${classOf}` : "Your Class Year"}
+                </motion.span>
+              }
+            />
           </div>
 
-          {/* Grade */}
-          <div className="relative">
-            <label className="block text-white/80 text-sm mb-1">Grade in School</label>
-            <select
-              value={grade}
-              onChange={(e) => setGrade(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl
-                         bg-white/10 backdrop-blur-md border border-white/20
-                         text-white font-bold pr-10
-                         focus:border-blue-400 focus:ring-2 focus:ring-blue-500
-                         appearance-none"
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="mt-4 flex flex-col px-4 space-y-4">
+            {/* DOB */}
+            <div>
+              <label className="text-xs text-white/70 mb-2 block">Date of Birth</label>
+              <div className="flex space-x-2">
+                <input
+                  ref={monthRef}
+                  aria-label="Month"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="MM"
+                  value={month}
+                  onChange={(e) => handleAutoAdvance(e, setMonth, dayRef, 2)}
+                  onBlur={() => month.length === 1 && setMonth("0" + month)}
+                  onKeyDown={(e) => handleBackspace(e)}
+                  className="w-14 h-12 text-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  ref={dayRef}
+                  aria-label="Day"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="DD"
+                  value={day}
+                  onChange={(e) => handleAutoAdvance(e, setDay, yearRef, 2)}
+                  onBlur={() => day.length === 1 && setDay("0" + day)}
+                  onKeyDown={(e) => handleBackspace(e, monthRef)}
+                  className="w-14 h-12 text-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
+                />
+                <input
+                  ref={yearRef}
+                  aria-label="Year"
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="YYYY"
+                  value={year}
+                  onChange={(e) => handleAutoAdvance(e, setYear, undefined, 4)}
+                  onKeyDown={(e) => handleBackspace(e, dayRef)}
+                  className="w-20 h-12 text-center rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <p className="text-xs text-white/50 mt-1">Use numbers only. No slashes.</p>
+            </div>
+
+            {/* Grade */}
+            <div>
+              <label className="text-xs text-white/70 mb-2 block">
+                Grade for the upcoming school year
+              </label>
+              <div role="radiogroup" className="flex space-x-2 overflow-x-auto pb-1 scrollbar-none">
+                {Array.from({ length: GRADE_MAX - GRADE_MIN + 1 }, (_, i) => GRADE_MIN + i).map(
+                  (g) => {
+                    const labels: Record<number, string> = {
+                      9: "Fr",
+                      10: "So",
+                      11: "Jr",
+                      12: "Sr",
+                    };
+                    return (
+                      <button
+                        key={g}
+                        type="button"
+                        role="radio"
+                        aria-checked={grade === g}
+                        onClick={() => setGrade(g)}
+                        className={`px-4 py-2 rounded-xl border text-white font-medium transition ${
+                          grade === g
+                            ? "bg-gradient-to-r from-[#006DFF] to-[#C6FF45] border-white/30"
+                            : "bg-white/10 border-white/20 hover:bg-white/20"
+                        }`}
+                      >
+                        {labels[g] || g}
+                      </button>
+                    );
+                  }
+                )}
+              </div>
+              <p className="text-xs text-white/50 mt-1">
+                If it’s summer, pick the grade you’ll start this fall.
+              </p>
+            </div>
+
+            {/* Warnings & Errors */}
+            <AnimatePresence>
+              {warning && (
+                <motion.p
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6 }}
+                  className="text-yellow-300 text-sm"
+                >
+                  {warning}
+                </motion.p>
+              )}
+            </AnimatePresence>
+            {error && <p className="text-red-400 text-sm">{error}</p>}
+
+            {/* CTA */}
+            <Button
+              type="submit"
+              disabled={!grade || loading}
+              className="mt-4 h-12 rounded-xl font-semibold disabled:opacity-40 sticky bottom-4"
             >
-              <option value="">Select your grade</option>
-              <option value="7th">7th</option>
-              <option value="8th">8th</option>
-              <option value="9th">9th</option>
-              <option value="10th">10th</option>
-              <option value="11th">11th</option>
-              <option value="12th">12th</option>
-              <option value="College">College</option>
-              <option value="Other">Other</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-              <svg
-                className="w-4 h-4 text-white/70"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </div>
-          </div>
-
-          {/* Inline Error */}
-          {error && <p className="text-sm text-red-400">{error}</p>}
-        </div>
-
-        {/* CTA */}
-        <div className="mt-6 mb-6">
-          <button
-            disabled={!month || !day || !year || !grade}
-            onClick={handleNext}
-            className={`w-full py-4 rounded-xl font-bold text-lg shadow-lg transition
-              ${
-                month && day && year && grade
-                  ? "bg-gradient-to-r from-[#006DFF] to-[#6C63FF] text-white"
-                  : "bg-gray-700/50 text-white/40 cursor-not-allowed"
-              }`}
-          >
-            Next →
-          </button>
+              {loading ? "Saving..." : "Continue"}
+            </Button>
+          </form>
         </div>
       </div>
     </OnboardingLayout>

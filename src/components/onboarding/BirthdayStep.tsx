@@ -1,201 +1,211 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion } from "framer-motion";
 import { useOnboardingStore } from "@/store/onboardingStore";
+import { ChevronLeft } from "lucide-react";
+import { motion } from "framer-motion";
 
-const SCHOOL_YEAR_START = { month: 8, day: 1 };
-const GRADE_MIN = 6;
-const GRADE_MAX = 12;
+export default function BirthdayStep({ onBack }: { onBack: () => void }) {
+  const { grade, setGrade, dob, setDob, setFlags } = useOnboardingStore();
 
-export default function BirthdayStep({
-  onNext,
-  onBack,
-}: {
-  onNext: () => void;
-  onBack: () => void;
-}) {
-  const { dob, grade, setDob, setGrade } = useOnboardingStore();
-
-  const [month, setMonth] = useState(dob?.month || "");
-  const [day, setDay] = useState(dob?.day || "");
-  const [year, setYear] = useState(dob?.year || "");
+  const [dobValue, setDobValue] = useState(
+    dob?.month && dob?.day && dob?.year ? `${dob.month}${dob.day}${dob.year}` : ""
+  );
   const [error, setError] = useState("");
 
-  const monthRef = useRef<HTMLInputElement>(null);
-  const dayRef = useRef<HTMLInputElement>(null);
-  const yearRef = useRef<HTMLInputElement>(null);
-
-  // Determine upcoming year
-  const today = new Date();
-  const cutoff = new Date(
-    today.getFullYear(),
-    SCHOOL_YEAR_START.month - 1,
-    SCHOOL_YEAR_START.day
-  );
-  const upcomingYear = today < cutoff ? today.getFullYear() : today.getFullYear() + 1;
-
-  const classOf =
-    grade !== null && grade >= GRADE_MIN && grade <= GRADE_MAX
-      ? upcomingYear + (12 - grade)
-      : null;
-
-  const isValidDate = (m: string, d: string, y: string) => {
-    if (!m || !d || !y) return false;
-    const mm = parseInt(m, 10);
-    const dd = parseInt(d, 10);
-    const yyyy = parseInt(y, 10);
-    if (yyyy < 1900 || yyyy > 2100) return false;
-    const date = new Date(yyyy, mm - 1, dd);
-    return (
-      date.getMonth() + 1 === mm &&
-      date.getDate() === dd &&
-      date.getFullYear() === yyyy
-    );
+  const formatDob = (val: string) => {
+    const digits = val.replace(/\D/g, "").slice(0, 8);
+    const parts: string[] = [];
+    if (digits.length >= 2) {
+      parts.push(digits.slice(0, 2));
+      if (digits.length >= 4) {
+        parts.push(digits.slice(2, 4));
+        if (digits.length > 4) {
+          parts.push(digits.slice(4));
+        }
+      } else {
+        parts.push(digits.slice(2));
+      }
+    } else {
+      parts.push(digits);
+    }
+    return parts.filter(Boolean).join("/");
   };
 
-  function handleSubmit(e: React.FormEvent) {
+  const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    const formatted = formatDob(raw);
+    setDobValue(formatted);
+  };
+
+  function calculateAge(mm: string, dd: string, yyyy: string) {
+    const birthDate = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
+    const today = new Date();
+    let age = today.getUTCFullYear() - birthDate.getUTCFullYear();
+    const m = today.getUTCMonth() - birthDate.getUTCMonth();
+    if (m < 0 || (m === 0 && today.getUTCDate() < birthDate.getUTCDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  function expectedGradeAgeRange(g: number) {
+    switch (g) {
+      case 9: return [13, 15];
+      case 10: return [14, 16];
+      case 11: return [15, 17];
+      case 12: return [16, 18];
+      default: return [0, 0];
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    if (!grade) {
-      setError("Select your upcoming grade.");
+    if (!grade || grade < 9 || grade > 12) {
+      setError("Right now this app is only for high school athletes (grades 9–12).");
       return;
     }
-    if ((month || day || year) && !isValidDate(month, day, year)) {
-      setError("Please enter a real date (MM DD YYYY).");
+
+    const digits = dobValue.replace(/\D/g, "");
+    if (digits.length !== 8) {
+      setError("Please complete your birthday.");
       return;
     }
-    setDob({ month, day, year });
-    onNext();
-  }
 
-  const handleAutoAdvance = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setter: (val: string) => void,
-    nextRef?: React.RefObject<HTMLInputElement>,
-    maxLength?: number
-  ) => {
-    let val = e.target.value.replace(/\D/g, "");
-    if (maxLength && val.length > maxLength) val = val.slice(0, maxLength);
-    setter(val);
-    if (maxLength && val.length === maxLength && nextRef?.current) {
-      nextRef.current.focus();
-    }
-  };
+    const mm = digits.slice(0, 2);
+    const dd = digits.slice(2, 4);
+    const yyyy = digits.slice(4);
 
-  const handleBackspace = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-    prevRef?: React.RefObject<HTMLInputElement>
-  ) => {
+    const date = new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
     if (
-      e.key === "Backspace" &&
-      (e.currentTarget as HTMLInputElement).selectionStart === 0
+      date.getMonth() + 1 !== parseInt(mm) ||
+      date.getDate() !== parseInt(dd) ||
+      date.getFullYear() !== parseInt(yyyy)
     ) {
-      prevRef?.current?.focus();
+      setError("That date doesn’t look right. Try again.");
+      return;
     }
+
+    if (date > new Date()) {
+      setError("That’s in the future. Enter your real birthday.");
+      return;
+    }
+
+    const age = calculateAge(mm, dd, yyyy);
+    if (age < 13) {
+      setError(
+        "Thanks for your interest! This app is only for athletes 13 and older. We’ll let you know when it’s your time to shine."
+      );
+      return;
+    }
+
+    const [minAge, maxAge] = expectedGradeAgeRange(grade);
+    if (age < minAge - 1 || age > maxAge + 1) {
+      setError(
+        "Hmm, that doesn’t look right. Your grade doesn’t match your birthday. Double-check and try again."
+      );
+      return;
+    }
+
+    // Save DOB
+    setDob({ month: mm, day: dd, year: yyyy });
+
+    // Save backend flags
+    setFlags({
+      age_at_signup: age,
+      is_minor: age < 18,
+      grade_validated: true,
+      parent_approval_status: age < 18 ? "Pending" : "Approved",
+    });
+
+    console.log("✅ Birthday step complete", {
+      dob: { month: mm, day: dd, year: yyyy },
+      grade,
+      flags: {
+        age_at_signup: age,
+        is_minor: age < 18,
+        grade_validated: true,
+        parent_approval_status: age < 18 ? "Pending" : "Approved",
+      },
+    });
+
+    // TODO: advance to next step
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+    <form onSubmit={handleSubmit} className="flex flex-col min-h-[70vh]">
+      {/* Top Nav Back Button */}
+      <div className="flex items-center mb-6 -ml-2">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center text-white/60 hover:text-white transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4 mr-1" strokeWidth={2} />
+          <span className="text-sm font-medium">Back</span>
+        </button>
+      </div>
+
       {/* DOB */}
-      <div>
-        <label className="text-xs text-white/70 mb-2 block">Date of Birth</label>
-        <div className="flex space-x-2">
-          <input
-            ref={monthRef}
-            aria-label="Month"
-            type="text"
-            inputMode="numeric"
-            placeholder="MM"
-            value={month}
-            onChange={(e) => handleAutoAdvance(e, setMonth, dayRef, 2)}
-            onBlur={() => month.length === 1 && setMonth("0" + month)}
-            onKeyDown={(e) => handleBackspace(e)}
-            className="w-14 h-12 text-center rounded-xl bg-white/10 border border-white/20 text-white font-bold"
-          />
-          <input
-            ref={dayRef}
-            aria-label="Day"
-            type="text"
-            inputMode="numeric"
-            placeholder="DD"
-            value={day}
-            onChange={(e) => handleAutoAdvance(e, setDay, yearRef, 2)}
-            onBlur={() => day.length === 1 && setDay("0" + day)}
-            onKeyDown={(e) => handleBackspace(e, monthRef)}
-            className="w-14 h-12 text-center rounded-xl bg-white/10 border border-white/20 text-white font-bold"
-          />
-          <input
-            ref={yearRef}
-            aria-label="Year"
-            type="text"
-            inputMode="numeric"
-            placeholder="YYYY"
-            value={year}
-            onChange={(e) => handleAutoAdvance(e, setYear, undefined, 4)}
-            onKeyDown={(e) => handleBackspace(e, dayRef)}
-            className="w-20 h-12 text-center rounded-xl bg-white/10 border border-white/20 text-white font-bold"
-          />
-        </div>
+      <div className="mb-5">
+        <label className="text-base text-white mb-2 block font-semibold">
+          When’s your birthday?
+        </label>
+        <input
+          aria-label="Birthday"
+          type="text"
+          inputMode="numeric"
+          placeholder="MM/DD/YYYY"
+          value={dobValue}
+          onChange={handleDobChange}
+          className="w-full h-12 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold tracking-widest text-center placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
       {/* Grade */}
-      <div>
-        <label className="text-xs text-white/70 mb-2 block">
-          Grade for the upcoming school year
+      <div className="mb-6">
+        <label className="text-base text-white mb-2 block font-semibold">
+          What grade are you in?
         </label>
-        <div role="radiogroup" className="flex space-x-2 overflow-x-auto pb-1 scrollbar-none">
-          {Array.from({ length: GRADE_MAX - GRADE_MIN + 1 }, (_, i) => GRADE_MIN + i).map(
-            (g) => {
-              const labels: Record<number, string> = {
-                9: "Fr",
-                10: "So",
-                11: "Jr",
-                12: "Sr",
-              };
-              return (
-                <button
-                  key={g}
-                  type="button"
-                  role="radio"
-                  aria-checked={grade === g}
-                  onClick={() => setGrade(g)}
-                  className={`px-4 py-2 rounded-xl border text-white font-medium transition ${
-                    grade === g
-                      ? "bg-gradient-to-r from-[#006DFF] to-[#C6FF45] border-white/30"
-                      : "bg-white/10 border-white/20 hover:bg-white/20"
+        <div className="flex justify-between gap-3">
+          {[9, 10, 11, 12].map((g) => {
+            const labels: Record<number, string> = {
+              9: "Fr",
+              10: "So",
+              11: "Jr",
+              12: "Sr",
+            };
+            const isSelected = grade === g;
+            return (
+              <motion.button
+                key={g}
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                animate={isSelected ? { scale: 1.05 } : { scale: 1 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setGrade(g)}
+                className={`flex-1 h-12 rounded-xl font-semibold transition-all duration-200 
+                  ${
+                    isSelected
+                      ? "bg-[#006DFF] text-white shadow-lg shadow-blue-500/40"
+                      : "border border-white/30 text-white/80 bg-transparent hover:bg-white/10"
                   }`}
-                >
-                  {labels[g] || g}
-                </button>
-              );
-            }
-          )}
+              >
+                {labels[g]}
+              </motion.button>
+            );
+          })}
         </div>
       </div>
 
-      {/* Error */}
-      <AnimatePresence>
-        {error && (
-          <motion.p
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 6 }}
-            className="text-red-400 text-sm"
-          >
-            {error}
-          </motion.p>
-        )}
-      </AnimatePresence>
+      {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
 
-      {/* CTA */}
-      <div className="flex justify-between space-x-2">
-        <Button type="button" onClick={onBack} className="flex-1 bg-gray-700">
-          Back
-        </Button>
-        <Button type="submit" disabled={!grade} className="flex-1">
+      {/* Continue CTA pinned bottom */}
+      <div className="mt-auto pt-6">
+        <Button type="submit" disabled={!grade} className="w-full">
           Continue
         </Button>
       </div>

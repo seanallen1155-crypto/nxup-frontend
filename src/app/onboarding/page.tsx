@@ -1,152 +1,64 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import OnboardingLayout from "@/components/ui/OnboardingLayout";
 import BrandCard from "@/components/ui/BrandCard";
 import { useOnboardingStore } from "@/store/onboardingStore";
 import { AnimatedFirst, AnimatedLast } from "@/components/ui/AnimatedName";
-import { Button } from "@/components/ui/button";
-import { useState, useRef } from "react";
+
+import NameStep from "@/components/onboarding/NameStep";
+import BirthdayStep from "@/components/onboarding/BirthdayStep";
+
+const SCHOOL_YEAR_START = { month: 8, day: 1 }; // Aug 1
+const GRADE_MIN = 9;
+const GRADE_MAX = 12;
 
 export default function OnboardingPage() {
-  const {
-    firstName,
-    lastName,
-    nickname,
-    setFirstName,
-    setLastName,
-    setNickname,
-  } = useOnboardingStore();
+  const { firstName, lastName, nickname, grade } = useOnboardingStore();
+  const [currentStep, setCurrentStep] = useState<"name" | "birthday">("name");
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  // Compute "Class of" year from grade
+  const classOf = useMemo(() => {
+    if (typeof grade !== "number" || grade < GRADE_MIN || grade > GRADE_MAX) return null;
 
-  const lastNameRef = useRef<HTMLInputElement>(null);
-  const nicknameRef = useRef<HTMLInputElement>(null);
+    const today = new Date();
+    const cutoff = new Date(today.getFullYear(), SCHOOL_YEAR_START.month - 1, SCHOOL_YEAR_START.day);
+    const upcomingYear = today < cutoff ? today.getFullYear() : today.getFullYear() + 1;
 
-  const isValidName = (val: string) =>
-    /^[A-Za-zÀ-ÖØ-öø-ÿ .'\-]{2,}$/.test(val.trim());
-
-  const formValid = isValidName(firstName) && isValidName(lastName);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!formValid) return;
-
-    setLoading(true);
-    setError("");
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      console.log("Name step complete ✅", {
-        firstName,
-        lastName,
-        nickname,
-      });
-      // For now, stop here (no birthday/location yet)
-    } catch {
-      setError("Something went wrong. Try again.");
-    } finally {
-      setLoading(false);
-    }
-  }
+    return upcomingYear + (12 - grade);
+  }, [grade]);
 
   return (
     <OnboardingLayout>
       <div className="-mx-6">
         <div className="flex flex-col min-h-[100svh] pt-[env(safe-area-inset-top,44px)] pb-[env(safe-area-inset-bottom,24px)]">
+          
           {/* Card */}
           <div className="flex justify-center">
             <BrandCard
               firstName={<AnimatedFirst firstName={firstName} nickname={nickname} />}
               lastName={<AnimatedLast lastName={lastName} />}
+              classYear={
+                classOf ? (
+                  <span className="inline-block leading-tight text-white font-light text-[clamp(18px,4vw,24px)]">
+                    Class of{" "}
+                    <span className="font-light">20</span>
+                    <span className="font-extrabold">{String(classOf).slice(-2)}</span>
+                  </span>
+                ) : (
+                  <span className="inline-block leading-tight text-white italic font-light text-[clamp(18px,4vw,24px)]">
+                    Your Class Year
+                  </span>
+                )
+              }
             />
           </div>
 
-          {/* Form */}
-          <form
-            onSubmit={handleSubmit}
-            className="mt-4 flex flex-col px-4 space-y-3"
-          >
-            {/* First Name */}
-            <div className="flex flex-col">
-              <label htmlFor="firstName" className="text-xs text-white/70 mb-1">
-                First Name
-              </label>
-              <input
-                id="firstName"
-                type="text"
-                placeholder="Jordan"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    lastNameRef.current?.focus();
-                  }
-                }}
-                className="h-12 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Last Name */}
-            <div className="flex flex-col">
-              <label htmlFor="lastName" className="text-xs text-white/70 mb-1">
-                Last Name
-              </label>
-              <input
-                id="lastName"
-                type="text"
-                placeholder="Washington"
-                ref={lastNameRef}
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    nicknameRef.current?.focus();
-                  }
-                }}
-                className="h-12 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* Nickname */}
-            <div className="flex flex-col">
-              <label htmlFor="nickname" className="text-xs text-white/70 mb-1">
-                Nickname (optional)
-              </label>
-              <input
-                id="nickname"
-                type="text"
-                placeholder="J-Wash"
-                ref={nicknameRef}
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    if (formValid) handleSubmit(e);
-                  }
-                }}
-                className="h-12 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* CTA */}
-            <Button
-              type="submit"
-              disabled={!formValid || loading}
-              className="mt-4 h-12 rounded-xl font-semibold disabled:opacity-40"
-            >
-              {loading ? "Saving..." : "Continue"}
-            </Button>
-
-            {error && (
-              <p className="text-red-400 text-sm mt-2 text-center">{error}</p>
-            )}
-          </form>
-
-          <div className="mt-auto h-[env(safe-area-inset-bottom,24px)]" />
+          {/* Step Manager */}
+          <div className="mt-4 flex flex-col px-4 space-y-4">
+            {currentStep === "name" && <NameStep onNext={() => setCurrentStep("birthday")} />}
+            {currentStep === "birthday" && <BirthdayStep onBack={() => setCurrentStep("name")} />}
+          </div>
         </div>
       </div>
     </OnboardingLayout>

@@ -2,44 +2,69 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useOnboardingStore } from "@/store/onboardingStore";
+import { ChevronLeft } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function LocationStep({ onBack }: { onBack: () => void }) {
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
+  const { setZip } = useOnboardingStore();
+  const [zip, setZipLocal] = useState("");
 
-  function handleSubmit(e: React.FormEvent) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = e.target.value.replace(/\D/g, "").slice(0, 5);
+    setZipLocal(digits);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Location submitted", { city, state });
-    // Future: save to Zustand store (add setLocation to onboardingStore)
-  }
+    setZip(zip);
+    console.log("✅ Location step complete", { zip });
+    // TODO: advance to next step
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-      <label className="text-xs text-white/70 mb-1">City</label>
-      <input
-        type="text"
-        placeholder="Your city"
-        value={city}
-        onChange={(e) => setCity(e.target.value)}
-        className="h-12 px-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold"
-      />
+    <form onSubmit={handleSubmit} className="flex flex-col min-h-[70vh]">
+      {/* Top Nav Back Button */}
+      <div className="flex items-center mb-6 -ml-2">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center text-white/60 hover:text-white transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4 mr-1" strokeWidth={2} />
+          <span className="text-sm font-medium">Back</span>
+        </button>
+      </div>
 
-      <label className="text-xs text-white/70 mb-1">State</label>
-      <input
-        type="text"
-        placeholder="Your state"
-        value={state}
-        onChange={(e) => setState(e.target.value)}
-        className="h-12 px-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold"
-      />
+      {/* ZIP Field */}
+      <div className="flex flex-col items-center mb-6">
+        <label className="text-base text-white mb-2 block font-semibold">
+          Where do you play?
+        </label>
+        <p className="text-sm text-white/60 mb-3">
+          Enter your ZIP code so we can check NIL rules in your state.
+        </p>
+        <input
+          type="text"
+          inputMode="numeric"
+          aria-label="ZIP Code"
+          placeholder="#####"
+          value={zip}
+          onChange={handleChange}
+          className="w-4/5 h-12 px-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold text-center tracking-widest placeholder-gray-400 placeholder:italic focus:border-blue-400 focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
 
-      <div className="flex justify-between space-x-2">
-        <Button type="button" onClick={onBack} className="flex-1 bg-gray-700">
-          Back
-        </Button>
-        <Button type="submit" className="flex-1">
-          Finish
-        </Button>
+      {/* CTA pinned bottom */}
+      <div className="mt-auto pt-6">
+        <motion.div
+          animate={zip.length === 5 ? { scale: [1, 1.05, 1] } : {}}
+          transition={{ duration: 0.3 }}
+        >
+          <Button type="submit" disabled={zip.length === 0} className="w-full">
+            Continue
+          </Button>
+        </motion.div>
       </div>
     </form>
   );

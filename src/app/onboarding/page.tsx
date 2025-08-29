@@ -8,6 +8,7 @@ import { AnimatedFirst, AnimatedLast } from "@/components/ui/AnimatedName";
 
 import NameStep from "@/components/onboarding/NameStep";
 import BirthdayStep from "@/components/onboarding/BirthdayStep";
+import LocationStep from "@/components/onboarding/LocationStep";
 
 const SCHOOL_YEAR_START = { month: 8, day: 1 }; // Aug 1
 const GRADE_MIN = 9;
@@ -15,7 +16,7 @@ const GRADE_MAX = 12;
 
 export default function OnboardingPage() {
   const { firstName, lastName, nickname, grade } = useOnboardingStore();
-  const [currentStep, setCurrentStep] = useState<"name" | "birthday">("name");
+  const [currentStep, setCurrentStep] = useState<"name" | "birthday" | "location">("name");
 
   // Compute "Class of" year from grade
   const classOf = useMemo(() => {
@@ -56,8 +57,18 @@ export default function OnboardingPage() {
 
           {/* Step Manager */}
           <div className="mt-4 flex flex-col px-4 space-y-4">
-            {currentStep === "name" && <NameStep onNext={() => setCurrentStep("birthday")} />}
-            {currentStep === "birthday" && <BirthdayStep onBack={() => setCurrentStep("name")} />}
+            {currentStep === "name" && (
+              <NameStep onNext={() => setCurrentStep("birthday")} />
+            )}
+            {currentStep === "birthday" && (
+              <BirthdayStep
+                onBack={() => setCurrentStep("name")}
+                onNext={() => setCurrentStep("location")}
+              />
+            )}
+            {currentStep === "location" && (
+              <LocationStep onBack={() => setCurrentStep("birthday")} />
+            )}
           </div>
         </div>
       </div>

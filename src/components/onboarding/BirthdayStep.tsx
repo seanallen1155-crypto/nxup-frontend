@@ -6,7 +6,13 @@ import { useOnboardingStore } from "@/store/onboardingStore";
 import { ChevronLeft } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function BirthdayStep({ onBack }: { onBack: () => void }) {
+export default function BirthdayStep({
+  onBack,
+  onNext,
+}: {
+  onBack: () => void;
+  onNext: () => void;
+}) {
   const { grade, setGrade, dob, setDob, setFlags } = useOnboardingStore();
 
   const [dobValue, setDobValue] = useState(
@@ -110,10 +116,8 @@ export default function BirthdayStep({ onBack }: { onBack: () => void }) {
       return;
     }
 
-    // Save DOB
+    // Save DOB + flags
     setDob({ month: mm, day: dd, year: yyyy });
-
-    // Save backend flags
     setFlags({
       age_at_signup: age,
       is_minor: age < 18,
@@ -132,7 +136,7 @@ export default function BirthdayStep({ onBack }: { onBack: () => void }) {
       },
     });
 
-    // TODO: advance to next step
+    onNext(); // advance to Location step
   };
 
   return (

@@ -12,8 +12,9 @@ env:
   SERVICE_NAME: nxup-frontend
 
 jobs:
+  # --- PR Validation (Lint, Type-check, Unit/Integration Tests) ---
   lint-typecheck-test:
-    name: Lint, Type Check, Unit Tests
+    name: PR Checks (Lint, Type Check, Unit/Integration Tests)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,9 +25,10 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
-      - run: npm run type-check || tsc --noEmit
+      - run: npm run type-check
       - run: npm run test -- --ci --coverage
 
+  # --- Build and Deploy to Cloud Run (dev branch only) ---
   build-and-deploy:
     name: Build & Deploy to Cloud Run (dev)
     needs: lint-typecheck-test
@@ -60,8 +62,9 @@ jobs:
             --platform managed \
             --allow-unauthenticated
 
+  # --- Post-deploy Smoke Tests ---
   smoke-tests:
-    name: Post-deploy Smoke Tests
+    name: Post-deploy Playwright Smoke Tests
     needs: build-and-deploy
     runs-on: ubuntu-latest
     steps:
@@ -74,7 +77,8 @@ jobs:
       - run: npm ci
       - run: npx playwright install --with-deps
 
-      # TODO: replace with real smoke spec
-      - name: Run Playwright smoke spine
+      - name: Run Playwright smoke tests against Cloud Run
+        env:
+          PLAYWRIGHT_BASE_URL: https://${{ env.SERVICE_NAME }}-${{ github.sha }}-uc.a.run.app
         run: |
-          npx playwright test e2e/smoke.spec.ts --reporter=dot
+          npm run e2e

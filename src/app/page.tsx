@@ -1,15 +1,22 @@
-export default function Page() {
+import { AppLayout } from "../components/layout/AppLayout";
+import { Button } from "../components/ui/Button";
+
+export default function HomePage() {
   return (
-    <main className="p-8 space-y-4">
-      <p className="text-body">
-        I should use <code>--color-body</code>.
-      </p>
-      <p className="text-primary">
-        I should use <code>--color-primary</code>.
-      </p>
-      <p className="text-caption">
-        I should use <code>--color-caption</code>.
-      </p>
-    </main>
+    <AppLayout>
+      <section className="flex flex-col items-center justify-center text-center space-y-6 py-16">
+        <h1 className="text-4xl font-bold">Welcome to NXUP</h1>
+        <p className="max-w-md text-text-secondaryLight dark:text-text-secondaryDark">
+          This is a demo of your design system in action — using the AppLayout
+          (with NavBar, Footer, and BottomNav) and the Button component styled
+          via tokens.
+        </p>
+
+        <div className="space-x-4">
+          <Button variant="primary">Get Started</Button>
+          <Button variant="secondary">Learn More</Button>
+        </div>
+      </section>
+    </AppLayout>
   );
 }

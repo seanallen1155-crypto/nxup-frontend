@@ -31,14 +31,7 @@ export default function RootLayout({
       className={`${manrope.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body
-        className="
-          bg-background 
-          text-body 
-          antialiased 
-          font-sans
-        "
-      >
+      <body className="bg-bg-light text-text-primaryLight antialiased font-sans">
         {children}
       </body>
     </html>

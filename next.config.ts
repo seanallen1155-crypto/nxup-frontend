@@ -20,10 +20,10 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  // 👇 Tell Next.js to export as static HTML
-  output: "export",
+  // ✅ Cloud Run requires standalone build output
+  output: "standalone",
 
-  // 👇 Explicitly expose API URL to frontend
+  // ✅ Keep API URL environment variable
   env: {
     NEXT_PUBLIC_API_URL:
       process.env.NEXT_PUBLIC_API_URL ||

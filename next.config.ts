@@ -5,12 +5,13 @@ const nextConfig: NextConfig = {
   webpack(config) {
     // Remove Next's default handling of SVGs
     const fileLoaderRule = config.module.rules.find(
-      (rule) =>
-        typeof rule !== "string" &&
-        rule !== null &&
-        (rule as RuleSetRule).test instanceof RegExp &&
-        (rule as RuleSetRule).test?.test(".svg")
-    ) as RuleSetRule | undefined;
+      (rule): rule is RuleSetRule => {
+        if (typeof rule === "string" || !rule) return false;
+
+        const maybeTest = (rule as RuleSetRule).test;
+        return maybeTest instanceof RegExp && maybeTest.test(".svg");
+      }
+    );
 
     if (fileLoaderRule) {
       fileLoaderRule.exclude = /\.svg$/i;

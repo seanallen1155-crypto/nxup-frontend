@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "playwright test"
+    "e2e": "playwright test -c tests/e2e/playwright.config.ts"
   },
   "dependencies": {
     "lucide-react": "^0.541.0",
@@ -28,6 +28,7 @@
     "@types/node": "^20.19.11",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19",
+    "@types/webpack": "^5.28.5",
     "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.5.0",

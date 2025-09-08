@@ -2,9 +2,9 @@ name: Frontend CI/CD
 
 on:
   pull_request:
-    branches: [ dev, main ]
+    branches: [ dev, main, repo-cleanup ]
   push:
-    branches: [ dev, main ]
+    branches: [ dev, main, repo-cleanup ]
 
 env:
   PROJECT_ID: nxup-dev

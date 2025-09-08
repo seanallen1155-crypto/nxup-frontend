@@ -1,11 +1,17 @@
 import type { NextConfig } from "next";
+import type { RuleSetRule } from "webpack";
 
 const nextConfig: NextConfig = {
   webpack(config) {
     // Remove Next's default handling of SVGs
-    const fileLoaderRule = config.module.rules.find((rule: any) =>
-      rule.test?.test?.(".svg")
-    );
+    const fileLoaderRule = config.module.rules.find(
+      (rule) =>
+        typeof rule !== "string" &&
+        rule !== null &&
+        (rule as RuleSetRule).test instanceof RegExp &&
+        (rule as RuleSetRule).test?.test(".svg")
+    ) as RuleSetRule | undefined;
+
     if (fileLoaderRule) {
       fileLoaderRule.exclude = /\.svg$/i;
     }

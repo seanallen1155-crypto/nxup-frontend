@@ -40,8 +40,10 @@ export function LandingPage() {
         aria-hidden="true"
       />
 
-      {/* Logo */}
-      <BrowserLogo theme="dark" variant="wide" />
+      {/* Logo (explicit positioning for Landing page) */}
+      <div className="absolute top-6 left-6 z-10">
+        <BrowserLogo theme="dark" variant="wide" />
+      </div>
 
       {/* Hero Card */}
       <div

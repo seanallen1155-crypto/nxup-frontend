@@ -9,6 +9,7 @@ import styles from "./LandingPage.module.css";
 
 import { BrowserLogo } from "@ui/logo/BrowserLogo";
 import { BrowserFooter } from "@ui/footer/BrowserFooter";
+import { PrimaryCTAButton } from "@ui/actions/PrimaryCTAButton";
 import { EligibilityFlow } from "@features/onboarding/EligibilityFlow";
 
 export function LandingPage() {
@@ -75,23 +76,10 @@ export function LandingPage() {
         </p>
 
         {/* CTA Button */}
-        <div
-          className="flex justify-center relative z-10"
-          style={{ marginTop: "24px", marginBottom: "8px" }}
-        >
-          <button
-            className="font-primary font-extrabold tracking-tight rounded-md"
-            style={{
-              fontSize: "16px",
-              padding: "8px 24px",
-              backgroundColor: "#FF5A1F",
-              color: "#FFFFFF",
-              border: "none",
-            }}
-            onClick={() => setShowFlow(true)}
-          >
+        <div className="flex justify-center relative z-10 mt-6 mb-2">
+          <PrimaryCTAButton onClick={() => setShowFlow(true)}>
             Start my NIL journey
-          </button>
+          </PrimaryCTAButton>
         </div>
 
         {/* Secondary Login Link */}

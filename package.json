@@ -16,6 +16,7 @@
     "dev:lan": "next dev -H 0.0.0.0"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.541.0",
     "next": "15.5.0",

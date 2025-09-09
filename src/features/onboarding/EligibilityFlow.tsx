@@ -40,13 +40,15 @@ export function EligibilityFlow() {
       </div>
 
       {/* Tracker */}
-      <div className="relative z-10 mt-4 w-full max-w-[600px] self-center px-4">
-        <StepTracker currentStep={currentStep} totalSteps={totalSteps} />
-      </div>
+      <StepTracker
+        currentStep={currentStep}
+        totalSteps={totalSteps}
+        className="mt-6 self-center"
+      />
 
       {/* Step Card */}
       <div className="relative z-10 flex flex-1 items-start justify-center mt-8">
-        <SolidCard className="w-[90vw] max-w-[600px] min-h-[400px] flex flex-col justify-center">
+        <SolidCard className="w-[90vw] max-w-[600px] min-h-[400px] flex flex-col">
           {renderStep()}
         </SolidCard>
       </div>

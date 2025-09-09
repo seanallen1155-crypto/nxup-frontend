@@ -1,31 +1,40 @@
-// Auto-generated from tokens.ts. Do not edit manually.
 export const typography = {
-  "fontFamily": {
-    "primary": "'Inter', sans-serif",
-    "accent": "'Inter Bold', sans-serif"
+  fontFamily: {
+    // Main sans-serif for body copy
+    primary: "'Inter', sans-serif",
+
+    // Accent font (already in your system, for emphasis or branding)
+    accent: "'Bebas Neue', sans-serif",
+
+    // 🔥 New serif font for premium headlines
+    serif: "'Georgia', serif",
   },
-  "fontSize": {
-    "hero": "32px",
-    "h2": "24px",
-    "h3": "20px",
-    "body": "16px",
-    "caption": "14px",
-    "h1_lg": "40px",
-    "h1_xl": "45px",
-    "h1_2xl": "52px"
+
+  fontWeight: {
+    regular: "400",
+    medium: "500",
+    bold: "700",
   },
-  "lineHeight": {
-    "hero": "1.2",
-    "body": "1.5"
+
+  fontSize: {
+    // Hero headline (mobile-first)
+    hero: "32px",
+
+    // Larger headline sizes for responsive scaling
+    h1_lg: "40px",
+    h1_xl: "48px",
+    h1_2xl: "56px",
+
+    // Standard body text
+    body: "16px",
+
+    // Smaller caption/microcopy
+    caption: "14px",
   },
-  "fontWeight": {
-    "light": "300",
-    "regular": "400",
-    "medium": "500",
-    "bold": "700"
+
+  lineHeight: {
+    hero: "1.2",  // tight for impact headlines
+    body: "1.4",  // standard readability
+    caption: "1.3",
   },
-  "letterSpacing": {
-    "default": "0px",
-    "heading": "1px"
-  }
-} as const;
+};

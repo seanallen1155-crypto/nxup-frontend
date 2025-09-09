@@ -1,0 +1,44 @@
+.heroCard {
+  position: relative;
+
+  /* Frosted glass background */
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+
+  /* Frost + saturation */
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+
+  /* Softer rounded corners */
+  border-radius: var(--radius-lg); /* try md/lg/xl depending on your tokens */
+
+  /* Glass edge via subtle inset highlight, no harsh border */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  /* Shadow polish */
+  box-shadow:
+    inset 0 1px 4px rgba(255, 255, 255, 0.25), /* subtle inner light */
+    0 6px 16px rgba(0, 0, 0, 0.3);             /* outer lift */
+
+  overflow: hidden;
+}
+
+/* Diagonal sheen */
+.heroCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background: linear-gradient(
+    60deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 15%,
+    transparent 40%
+  );
+
+  pointer-events: none;
+}

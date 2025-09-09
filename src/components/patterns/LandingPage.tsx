@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import styles from "./LandingPage.module.css"; // ✅ import local CSS module
 
 export function LandingPage() {
   return (
@@ -38,21 +39,15 @@ export function LandingPage() {
         />
       </div>
 
-      {/* Hero Card (glassmorphic experiment) */}
+      {/* Hero Card (with local CSS module effect) */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 z-10
-                  w-[90vw] max-w-[1065px] 
-                  rounded-md shadow-lg px-lg py-xl
-                  backdrop-blur-md"
-        style={{
-          top: "56.5vh",
-          backgroundColor: "rgba(30, 30, 30, 0.6)",
-          border: "1px solid rgba(255,255,255,0.1)",
-        }}
+        className={`${styles.heroCard} absolute left-1/2 -translate-x-1/2 z-10
+                    w-[90vw] max-w-[1065px] rounded-md px-lg py-xl`}
+        style={{ top: "53vh" }}
       >
         {/* Hero Statement */}
         <h1
-          className="font-serif text-center leading-tight mt-4"
+          className="font-serif text-center leading-tight mt-4 relative z-10"
           style={{ fontSize: "24px", lineHeight: "1.2", color: "#FFFFFF" }}
         >
           Your NIL Journey
@@ -62,7 +57,7 @@ export function LandingPage() {
 
         {/* Sub-text */}
         <p
-          className="font-primary text-center font-normal"
+          className="font-primary text-center font-normal relative z-10"
           style={{
             fontSize: "15px",
             lineHeight: "1.3",
@@ -76,13 +71,16 @@ export function LandingPage() {
         </p>
 
         {/* CTA Button */}
-        <div className="flex justify-center" style={{ marginTop: "24px", marginBottom: "8px" }}>
+        <div
+          className="flex justify-center relative z-10"
+          style={{ marginTop: "24px", marginBottom: "8px" }}
+        >
           <button
             className="font-primary font-bold tracking-tight rounded-md"
             style={{
-              fontSize: "16px", // slightly larger than subtext
+              fontSize: "16px",
               padding: "8px 24px",
-              backgroundColor: "#FF5A1F", // brand accent
+              backgroundColor: "#FF5A1F",
               color: "#FFFFFF",
               border: "none",
             }}
@@ -93,7 +91,7 @@ export function LandingPage() {
 
         {/* Secondary Login Link */}
         <p
-          className="font-primary text-center font-normal mb-4"
+          className="font-primary text-center font-normal mb-4 relative z-10"
           style={{
             fontSize: "12px",
             lineHeight: "1.3",

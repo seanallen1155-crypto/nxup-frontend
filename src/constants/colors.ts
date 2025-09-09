@@ -16,7 +16,9 @@ export const colors = {
     "primary": "#3D5AFE",
     "primaryHover": "#304FFE",
     "secondary": "#FF4081",
-    "secondaryHover": "#F50057"
+    "secondaryHover": "#F50057",
+    "accent": "#FF5A1F",
+    "accentHover": "#E64500",
   },
   "semantic": {
     "success": "#00E676",

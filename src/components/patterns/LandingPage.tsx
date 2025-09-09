@@ -38,6 +38,24 @@ export function LandingPage() {
         />
       </div>
 
+      {/* Hero Card (raw styles for placement test, height = content-driven) */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 z-10"
+        style={{
+          top: "56.5vh", // anchored landmark
+          width: "90vw",
+          maxWidth: "1065px",
+          backgroundColor: "#1E1E1E", // raw bg
+          borderRadius: "12px", // raw radius
+          boxShadow: "0 4px 4px rgba(0,0,0,0.25)", // raw shadow
+          padding: "24px", // raw padding
+        }}
+      >
+        <div style={{ textAlign: "center", color: "#B3B3B3" }}>
+          Hero Card Placeholder
+        </div>
+      </div>
+
       {/* Footer (sticky bottom) */}
       <footer className="absolute bottom-4 left-0 right-0 z-10">
         <nav className="flex justify-center space-x-6 text-xs sm:text-sm text-gray-400">

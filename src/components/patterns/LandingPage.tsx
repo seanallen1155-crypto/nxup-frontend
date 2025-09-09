@@ -1,15 +1,28 @@
+// src/components/patterns/LandingPage.tsx
+
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import styles from "./LandingPage.module.css"; // ✅ import local CSS module
+import { useState } from "react";
+import styles from "./LandingPage.module.css";
+
+// 👇 Import the flow
+import { EligibilityFlow } from "@/features/onboarding/EligibilityFlow";
 
 export function LandingPage() {
+  const [showFlow, setShowFlow] = useState(false);
+
+  // If user has started onboarding, show flow instead of landing hero
+  if (showFlow) {
+    return <EligibilityFlow />;
+  }
+
   return (
     <div className="relative min-h-screen w-full flex flex-col">
       {/* Background image */}
       <Image
-        src="/landing_athlete.png"
+        src="/images/landing/athlete.png" 
         alt="Athlete background"
         fill
         className="object-cover"
@@ -30,7 +43,7 @@ export function LandingPage() {
       {/* Logo (top-left) */}
       <div className="absolute top-6 left-6 z-10">
         <Image
-          src="/logo-dark.svg"
+          src="/images/logos/logo-dark.svg"   // ✅ updated path
           alt="App logo"
           width={301}
           height={40}
@@ -39,7 +52,7 @@ export function LandingPage() {
         />
       </div>
 
-      {/* Hero Card (with local CSS module effect) */}
+      {/* Hero Card */}
       <div
         className={`${styles.heroCard} absolute left-1/2 -translate-x-1/2 z-10
                     w-[90vw] max-w-[1065px] rounded-md px-lg py-xl`}
@@ -84,6 +97,7 @@ export function LandingPage() {
               color: "#FFFFFF",
               border: "none",
             }}
+            onClick={() => setShowFlow(true)} // 👈 Triggers the onboarding flow
           >
             Start my NIL journey
           </button>
@@ -101,10 +115,9 @@ export function LandingPage() {
           Already a user?{" "}
           <span className="font-semibold cursor-pointer">Login</span>
         </p>
-
       </div>
 
-      {/* Footer (sticky bottom) */}
+      {/* Footer */}
       <footer className="absolute bottom-4 left-0 right-0 z-10">
         <nav className="flex justify-center space-x-6 text-xs sm:text-sm text-gray-400">
           <Link href="/terms" className="hover:text-brand-accent">

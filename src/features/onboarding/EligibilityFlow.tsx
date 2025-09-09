@@ -4,7 +4,9 @@
 
 import { useState } from "react";
 import { StepDOB } from "./steps/StepDOB";
-import { BackgroundImage } from "@/components/patterns/background/BackgroundImage";
+import { BackgroundImage } from "@patterns/background/BackgroundImage";
+import { BrowserLogo } from "@ui/logo/BrowserLogo";
+import { BrowserFooter } from "@ui/footer/BrowserFooter";
 
 export function EligibilityFlow() {
   const [currentStep] = useState<number>(1); // currently locked to DOB
@@ -29,10 +31,16 @@ export function EligibilityFlow() {
       {/* Background: blurred + darkened version for flow */}
       <BackgroundImage blurred darken />
 
-      {/* Step content on top */}
+      {/* Logo (fixed top-left) */}
+      <BrowserLogo theme="dark" variant="wide" />
+
+      {/* Step content */}
       <div className="relative z-10 flex-1 flex flex-col">
         {renderStep()}
       </div>
+
+      {/* Footer (fixed bottom, consistent across steps) */}
+      <BrowserFooter theme="dark" />
     </div>
   );
 }

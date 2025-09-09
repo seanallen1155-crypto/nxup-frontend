@@ -15,8 +15,14 @@
     "paths": {
       "theme": ["./theme.ts"],
       "@/typography": ["./src/components/ui/typography.tsx"],
+      "@/icons/*": ["public/icons/*"],
       "@/*": ["src/*"],
-      "@/icons/*": ["public/icons/*"]
+      "@ui/*": ["src/components/ui/*"],
+      "@patterns/*": ["src/components/patterns/*"],
+      "@features/*": ["src/features/*"],
+      "@constants/*": ["src/constants/*"],
+      "@lib/*": ["src/lib/*"],
+      "@styles/*": ["src/styles/*"]
     },
 
     "types": ["node", "tailwindcss"],

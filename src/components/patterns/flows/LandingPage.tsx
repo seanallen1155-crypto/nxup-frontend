@@ -1,19 +1,19 @@
-// src/components/patterns/LandingPage.tsx
+// src/components/patterns/flows/LandingPage.tsx
 
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import styles from "@/components/patterns/flows/LandingPage.module.css";
-import { EligibilityFlow } from "@/features/onboarding/EligibilityFlow";
-// import { BackgroundImage } from "@/components/patterns/background/BackgroundImage";
+import styles from "./LandingPage.module.css";
 
+import { BrowserLogo } from "@ui/logo/BrowserLogo";
+import { BrowserFooter } from "@ui/footer/BrowserFooter";
+import { EligibilityFlow } from "@features/onboarding/EligibilityFlow";
 
 export function LandingPage() {
   const [showFlow, setShowFlow] = useState(false);
 
-  // If user has started onboarding, show flow instead of landing hero
   if (showFlow) {
     return <EligibilityFlow />;
   }
@@ -22,7 +22,7 @@ export function LandingPage() {
     <div className="relative min-h-screen w-full flex flex-col">
       {/* Background image */}
       <Image
-        src="/images/landing/athlete.png" 
+        src="/images/landing/athlete.png"
         alt="Athlete background"
         fill
         className="object-cover"
@@ -40,17 +40,8 @@ export function LandingPage() {
         aria-hidden="true"
       />
 
-      {/* Logo (top-left) */}
-      <div className="absolute top-6 left-6 z-10">
-        <Image
-          src="/images/logos/logo-dark.svg"   // ✅ updated path
-          alt="App logo"
-          width={301}
-          height={40}
-          className="h-10 w-auto max-w-[200px] sm:max-w-[301px]"
-          priority
-        />
-      </div>
+      {/* Logo */}
+      <BrowserLogo theme="dark" variant="wide" />
 
       {/* Hero Card */}
       <div
@@ -58,7 +49,6 @@ export function LandingPage() {
                     w-[90vw] max-w-[1065px] rounded-md px-lg py-xl`}
         style={{ top: "53vh" }}
       >
-        {/* Hero Statement */}
         <h1
           className="font-serif font-semibold text-center leading-tight mt-4 relative z-10"
           style={{ fontSize: "26px", lineHeight: "1.2", color: "#FFFFFF" }}
@@ -68,7 +58,6 @@ export function LandingPage() {
           Starts Here
         </h1>
 
-        {/* Sub-text */}
         <p
           className="font-primary text-center font-normal relative z-10"
           style={{
@@ -97,7 +86,7 @@ export function LandingPage() {
               color: "#FFFFFF",
               border: "none",
             }}
-            onClick={() => setShowFlow(true)} // 👈 Triggers the onboarding flow
+            onClick={() => setShowFlow(true)}
           >
             Start my NIL journey
           </button>
@@ -117,20 +106,8 @@ export function LandingPage() {
         </p>
       </div>
 
-      {/* Footer */}
-      <footer className="absolute bottom-4 left-0 right-0 z-10">
-        <nav className="flex justify-center space-x-6 text-xs sm:text-sm text-gray-400">
-          <Link href="/terms" className="hover:text-brand-accent">
-            Terms of Use
-          </Link>
-          <Link href="/privacy" className="hover:text-brand-accent">
-            Privacy Policy
-          </Link>
-          <Link href="/contact" className="hover:text-brand-accent">
-            Contact
-          </Link>
-        </nav>
-      </footer>
+      {/* Footer (reusable) */}
+      <BrowserFooter theme="dark" />
     </div>
   );
 }

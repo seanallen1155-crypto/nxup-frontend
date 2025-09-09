@@ -3,18 +3,16 @@
 "use client";
 
 import { useState } from "react";
-// Later we’ll import step components, e.g. StepDOB, StepGrade, StepZip
-// import { StepDOB } from "./steps/StepDOB";
+import { StepDOB } from "./steps/StepDOB";
+import { BackgroundImage } from "@/components/patterns/background/BackgroundImage";
 
 export function EligibilityFlow() {
-  // State for which step we’re on (1 = DOB, 2 = Grade, 3 = Zip, etc.)
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep] = useState<number>(1); // currently locked to DOB
 
-  // Temporary placeholder render
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <p>Step 1 (DOB) placeholder</p>;
+        return <StepDOB />;
       case 2:
         return <p>Step 2 (Grade) placeholder</p>;
       case 3:
@@ -27,24 +25,13 @@ export function EligibilityFlow() {
   };
 
   return (
-    <div className="relative w-full flex flex-col items-center justify-center min-h-screen">
-      <div
-        className="
-          relative z-10 w-[90vw] max-w-[600px] rounded-lg 
-          bg-black/40 backdrop-blur-xl 
-          p-8 shadow-lg
-        "
-      >
-        {renderStep()}
+    <div className="relative min-h-screen w-full flex flex-col">
+      {/* Background: blurred + darkened version for flow */}
+      <BackgroundImage blurred darken />
 
-        <div className="flex justify-end mt-6">
-          <button
-            onClick={() => setCurrentStep((s) => s + 1)}
-            className="bg-orange-500 text-white px-4 py-2 rounded-md"
-          >
-            Next →
-          </button>
-        </div>
+      {/* Step content on top */}
+      <div className="relative z-10 flex-1 flex flex-col">
+        {renderStep()}
       </div>
     </div>
   );

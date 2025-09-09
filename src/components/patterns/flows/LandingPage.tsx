@@ -5,10 +5,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import styles from "./LandingPage.module.css";
-
-// 👇 Import the flow
+import styles from "@/components/patterns/flows/LandingPage.module.css";
 import { EligibilityFlow } from "@/features/onboarding/EligibilityFlow";
+// import { BackgroundImage } from "@/components/patterns/background/BackgroundImage";
+
 
 export function LandingPage() {
   const [showFlow, setShowFlow] = useState(false);

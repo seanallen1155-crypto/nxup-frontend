@@ -38,22 +38,72 @@ export function LandingPage() {
         />
       </div>
 
-      {/* Hero Card (raw styles for placement test, height = content-driven) */}
+      {/* Hero Card (glassmorphic experiment) */}
       <div
-        className="absolute left-1/2 -translate-x-1/2 z-10"
+        className="absolute left-1/2 -translate-x-1/2 z-10
+                  w-[90vw] max-w-[1065px] 
+                  rounded-md shadow-lg px-lg py-xl
+                  backdrop-blur-md"
         style={{
-          top: "56.5vh", // anchored landmark
-          width: "90vw",
-          maxWidth: "1065px",
-          backgroundColor: "#1E1E1E", // raw bg
-          borderRadius: "12px", // raw radius
-          boxShadow: "0 4px 4px rgba(0,0,0,0.25)", // raw shadow
-          padding: "24px", // raw padding
+          top: "56.5vh",
+          backgroundColor: "rgba(30, 30, 30, 0.6)",
+          border: "1px solid rgba(255,255,255,0.1)",
         }}
       >
-        <div style={{ textAlign: "center", color: "#B3B3B3" }}>
-          Hero Card Placeholder
+        {/* Hero Statement */}
+        <h1
+          className="font-serif text-center leading-tight mt-4"
+          style={{ fontSize: "24px", lineHeight: "1.2", color: "#FFFFFF" }}
+        >
+          Your NIL Journey
+          <br />
+          Starts Here
+        </h1>
+
+        {/* Sub-text */}
+        <p
+          className="font-primary text-center font-normal"
+          style={{
+            fontSize: "15px",
+            lineHeight: "1.3",
+            color: "#B3B3B3",
+            marginTop: "10px",
+          }}
+        >
+          Built for high school athletes like you!
+          <br />
+          Free, supportive, &amp; always in your control.
+        </p>
+
+        {/* CTA Button */}
+        <div className="flex justify-center" style={{ marginTop: "24px", marginBottom: "8px" }}>
+          <button
+            className="font-primary font-bold tracking-tight rounded-md"
+            style={{
+              fontSize: "16px", // slightly larger than subtext
+              padding: "8px 24px",
+              backgroundColor: "#FF5A1F", // brand accent
+              color: "#FFFFFF",
+              border: "none",
+            }}
+          >
+            Start my NIL journey
+          </button>
         </div>
+
+        {/* Secondary Login Link */}
+        <p
+          className="font-primary text-center font-normal mb-4"
+          style={{
+            fontSize: "12px",
+            lineHeight: "1.3",
+            color: "#B3B3B3",
+            marginTop: "8px",
+          }}
+        >
+          Already an {`{AppName}`} user?{" "}
+          <span className="underline cursor-pointer">Login</span>
+        </p>
       </div>
 
       {/* Footer (sticky bottom) */}

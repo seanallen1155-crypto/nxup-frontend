@@ -47,8 +47,8 @@ export function LandingPage() {
       >
         {/* Hero Statement */}
         <h1
-          className="font-serif text-center leading-tight mt-4 relative z-10"
-          style={{ fontSize: "24px", lineHeight: "1.2", color: "#FFFFFF" }}
+          className="font-serif font-semibold text-center leading-tight mt-4 relative z-10"
+          style={{ fontSize: "26px", lineHeight: "1.2", color: "#FFFFFF" }}
         >
           Your NIL Journey
           <br />
@@ -65,9 +65,9 @@ export function LandingPage() {
             marginTop: "10px",
           }}
         >
-          Built for high school athletes like you!
+          Built for high school athletes.
           <br />
-          Free, supportive, &amp; always in your control.
+          Free, supportive, and always in your control.
         </p>
 
         {/* CTA Button */}
@@ -76,7 +76,7 @@ export function LandingPage() {
           style={{ marginTop: "24px", marginBottom: "8px" }}
         >
           <button
-            className="font-primary font-bold tracking-tight rounded-md"
+            className="font-primary font-extrabold tracking-tight rounded-md"
             style={{
               fontSize: "16px",
               padding: "8px 24px",
@@ -91,17 +91,17 @@ export function LandingPage() {
 
         {/* Secondary Login Link */}
         <p
-          className="font-primary text-center font-normal mb-4 relative z-10"
+          className="font-primary text-center font-light mb-4 relative z-10 text-gray-400"
           style={{
             fontSize: "12px",
             lineHeight: "1.3",
-            color: "#B3B3B3",
             marginTop: "8px",
           }}
         >
-          Already an {`{AppName}`} user?{" "}
-          <span className="underline cursor-pointer">Login</span>
+          Already a user?{" "}
+          <span className="font-semibold cursor-pointer">Login</span>
         </p>
+
       </div>
 
       {/* Footer (sticky bottom) */}

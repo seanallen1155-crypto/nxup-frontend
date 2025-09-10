@@ -29,44 +29,38 @@ export function StepDOB({ onNext }: StepDOBProps) {
       </p>
 
       {/* Segmented DOB inputs */}
-      <div className="mt-8 flex space-x-4 w-full max-w-sm">
-        {/* Month */}
-        <Input
-          type="text"
-          name="dob-month"
-          id="dob-month"
-          placeholder="MM"
-          aria-label="Month"
-          className="w-1/4 text-center"
-          maxLength={2}
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-        />
-        {/* Day */}
-        <Input
-          type="text"
-          name="dob-day"
-          id="dob-day"
-          placeholder="DD"
-          aria-label="Day"
-          className="w-1/4 text-center"
-          maxLength={2}
-          value={day}
-          onChange={(e) => setDay(e.target.value)}
-        />
-        {/* Year */}
-        <Input
-          type="text"
-          name="dob-year"
-          id="dob-year"
-          placeholder="YYYY"
-          aria-label="Year"
-          className="flex-1 text-center"
-          maxLength={4}
-          value={year}
-          onChange={(e) => setYear(e.target.value)}
-        />
-      </div>
+      <div className="mt-8 flex space-x-3 w-full max-w-sm">
+      {/* Month */}
+      <Input
+        type="text"
+        placeholder="MM"
+        aria-label="Month"
+        className="w-16 text-center"
+        maxLength={2}
+        value={month}
+        onChange={(e) => setMonth(e.target.value)}
+      />
+      {/* Day */}
+      <Input
+        type="text"
+        placeholder="DD"
+        aria-label="Day"
+        className="w-16 text-center"
+        maxLength={2}
+        value={day}
+        onChange={(e) => setDay(e.target.value)}
+      />
+      {/* Year */}
+      <Input
+        type="text"
+        placeholder="YYYY"
+        aria-label="Year"
+        className="flex-1 text-center"
+        maxLength={4}
+        value={year}
+        onChange={(e) => setYear(e.target.value)}
+      />
+    </div>
 
       {/* Continue Button */}
       <div className="mt-10">

@@ -9,6 +9,7 @@ const mockZipMap: Record<string, string> = {
   "07648": "New Jersey",
   "10001": "New York",
   "30301": "Georgia",
+  "33131": "Florida",
   "60601": "Illinois",
   "94105": "California",
 };

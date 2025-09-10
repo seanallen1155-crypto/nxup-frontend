@@ -1,12 +1,14 @@
-// src/features/onboarding/steps/StepDOB.tsx
-
 "use client";
 
 import { useState } from "react";
 import { Input } from "@ui/forms/Input";
 import { PrimaryCTAButton } from "@ui/actions/PrimaryCTAButton";
 
-export function StepDOB() {
+interface StepDOBProps {
+  onNext: () => void;
+}
+
+export function StepDOB({ onNext }: StepDOBProps) {
   const [month, setMonth] = useState("");
   const [day, setDay] = useState("");
   const [year, setYear] = useState("");
@@ -22,7 +24,8 @@ export function StepDOB() {
 
       {/* Subline */}
       <p className="mt-2 text-md font-semibold text-gray-300 text-center max-w-md">
-        This one’s easy. If you’re 13 or older, you’re good to go. It’s just to keep things safe for you.
+        This one’s easy. If you’re 13 or older, you’re good to go. It’s just to
+        keep things safe for you.
       </p>
 
       {/* Segmented DOB inputs */}
@@ -67,7 +70,9 @@ export function StepDOB() {
 
       {/* Continue Button */}
       <div className="mt-10">
-        <PrimaryCTAButton disabled={!isComplete}>Continue</PrimaryCTAButton>
+        <PrimaryCTAButton disabled={!isComplete} onClick={onNext}>
+          Continue
+        </PrimaryCTAButton>
       </div>
     </div>
   );

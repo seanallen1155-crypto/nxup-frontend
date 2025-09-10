@@ -1,9 +1,9 @@
-// src/features/onboarding/EligibilityFlow.tsx
-
 "use client";
 
 import { useState } from "react";
 import { StepDOB } from "./steps/StepDOB";
+import { StepGrade } from "./steps/StepGrade";
+import { StepZip } from "./steps/StepZip"; // NEW import
 import { BackgroundImage } from "@patterns/background/BackgroundImage";
 import { BrowserLogo } from "@ui/logo/BrowserLogo";
 import { BrowserFooter } from "@ui/footer/BrowserFooter";
@@ -11,17 +11,17 @@ import { SolidCard } from "@ui/cards/SolidCard";
 import { StepTracker } from "@ui/feedback/StepTracker";
 
 export function EligibilityFlow() {
-  const [currentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const totalSteps = 3;
 
   const renderStep = () => {
     switch (currentStep) {
       case 1:
-        return <StepDOB />;
+        return <StepDOB onNext={() => setCurrentStep(2)} />;
       case 2:
-        return <p>Step 2 (Grade) placeholder</p>;
+        return <StepGrade onNext={() => setCurrentStep(3)} />;
       case 3:
-        return <p>Step 3 (Zip) placeholder</p>;
+        return <StepZip onNext={() => setCurrentStep(4)} />;
       case 4:
         return <p>Eligibility result placeholder</p>;
       default:
@@ -43,6 +43,7 @@ export function EligibilityFlow() {
       <StepTracker
         currentStep={currentStep}
         totalSteps={totalSteps}
+        onBack={() => setCurrentStep((s) => Math.max(1, s - 1))}
         className="mt-6 self-center"
       />
 

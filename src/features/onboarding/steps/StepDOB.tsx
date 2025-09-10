@@ -35,21 +35,23 @@ export function StepDOB({ onNext }: StepDOBProps) {
         type="text"
         placeholder="MM"
         aria-label="Month"
-        className="w-16 text-center"
+        className="w-20 text-center"
         maxLength={2}
         value={month}
         onChange={(e) => setMonth(e.target.value)}
       />
+
       {/* Day */}
       <Input
         type="text"
         placeholder="DD"
         aria-label="Day"
-        className="w-16 text-center"
+        className="w-20 text-center"
         maxLength={2}
         value={day}
         onChange={(e) => setDay(e.target.value)}
       />
+
       {/* Year */}
       <Input
         type="text"

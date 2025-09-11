@@ -10,6 +10,7 @@ import { StepIneligibleUnder13 } from "./steps/StepIneligibleUnder13";
 import { StepIneligibleNotHS } from "./steps/StepIneligibleNotHS";
 import { StepIneligibleCollege } from "./steps/StepIneligibleCollege";
 import { StepIneligibleState } from "./steps/StepIneligibleState";
+import { StepIneligibleExit } from "./steps/StepIneligibleExit";
 import { BackgroundImage } from "@patterns/background/BackgroundImage";
 import { BrowserLogo } from "@ui/logo/BrowserLogo";
 import { BrowserFooter } from "@ui/footer/BrowserFooter";
@@ -20,8 +21,7 @@ import { IneligibleBar } from "@ui/feedback/IneligibleBar";
 import { Lock, GraduationCap, School, MapPin } from "lucide-react";
 
 export function EligibilityFlow() {
-  const [currentStep, setCurrentStep] = useState<number>(9);
-  //const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(1);
   const totalSteps = 3;
 
   const renderStep = () => {
@@ -39,11 +39,13 @@ export function EligibilityFlow() {
       case 6:
         return <StepIneligibleUnder13 />;
       case 7:
-        return <StepIneligibleNotHS onNext={() => console.log("Waitlist entry: Not HS")} />;
+        return <StepIneligibleNotHS onNext={() => setCurrentStep(10)} />;
       case 8:
-        return <StepIneligibleCollege onNext={() => console.log("Waitlist entry: College")} />;
+        return <StepIneligibleCollege onNext={() => setCurrentStep(10)} />;
       case 9:
-        return <StepIneligibleState onNext={() => console.log("Waitlist entry: State")} />;
+        return <StepIneligibleState onNext={() => setCurrentStep(10)} />;
+      case 10:
+        return <StepIneligibleExit />;
       default:
         return <p>Unknown step</p>;
     }
@@ -94,9 +96,10 @@ export function EligibilityFlow() {
           <IneligibleBar icon={MapPin} />
         </div>
       )}
+      {/* Step 10 intentionally has no bar */}
 
       {/* Step Card */}
-      {currentStep !== 5 && (
+      {[1, 2, 3, 4, 6, 7, 8, 9].includes(currentStep) && (
         <div className="relative z-10 flex flex-1 items-start justify-center mt-8">
           <SolidCard
             className={`w-[90vw] max-w-[600px] min-h-[400px] flex flex-col transition-colors duration-300
@@ -108,8 +111,8 @@ export function EligibilityFlow() {
         </div>
       )}
 
-      {/* Step 5 content without card */}
-      {currentStep === 5 && (
+      {/* Exit steps (5 = eligible, 10 = ineligible) */}
+      {[5, 10].includes(currentStep) && (
         <div className="relative z-10 flex flex-1 items-center justify-center">
           {renderStep()}
         </div>

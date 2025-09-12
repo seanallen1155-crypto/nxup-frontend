@@ -166,7 +166,9 @@ export default function ParentApprovalPage() {
               {values.map((val, i) => (
                 <InputLight
                   key={i}
-                  ref={(el) => (inputsRef.current[i] = el)}
+                  ref={(el) => {
+                    inputsRef.current[i] = el;
+                  }}
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
@@ -176,7 +178,7 @@ export default function ParentApprovalPage() {
                   onKeyDown={(e) => handleKeyDown(e, i)}
                   onPaste={handlePaste}
                   variant="parent"
-                  size="lg"
+                  fieldSize="lg"
                   hasError={!!error}
                   className="w-10 sm:w-12 h-12 sm:h-14"
                 />

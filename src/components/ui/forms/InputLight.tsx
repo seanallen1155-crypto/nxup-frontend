@@ -4,32 +4,41 @@ import React, { forwardRef, InputHTMLAttributes } from "react";
 import clsx from "clsx";
 
 type InputVariant = "default" | "parent";
-type InputSize = "sm" | "md" | "lg";
+type InputFieldSize = "sm" | "md" | "lg";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   className?: string;
   value?: string;
   variant?: InputVariant;
-  size?: InputSize;
+  fieldSize?: InputFieldSize;
   hasError?: boolean;
 }
 
 export const InputLight = forwardRef<HTMLInputElement, InputProps>(
   (
-    { className = "", value, variant = "default", size = "md", hasError = false, ...props },
+    {
+      className = "",
+      value,
+      variant = "default",
+      fieldSize = "md",
+      hasError = false,
+      ...props
+    },
     ref
   ) => {
     const hasValue = value !== undefined && value !== "";
 
     // Base + typography
-    const baseClasses = "w-full rounded-md transition-colors duration-200";
-    const typography = "placeholder-gray-400 placeholder:font-normal";
+    const baseClasses =
+      "w-full rounded-md transition-colors duration-200";
+    const typography =
+      "placeholder-gray-400 placeholder:font-normal";
 
     // Size scaling
     const sizeClasses =
-      size === "sm"
+      fieldSize === "sm"
         ? "px-2 py-1 text-sm"
-        : size === "lg"
+        : fieldSize === "lg"
         ? "px-0 py-0 text-center text-2xl leading-none font-medium"
         : "px-4 py-2 text-base font-semibold";
 

@@ -7,6 +7,7 @@ import { BrowserLogo } from "@/components/ui/logo/BrowserLogo";
 import ChildAvatar from "@/components/ui/avatars/ChildAvatar";
 import { mockParentPortal } from "@/constants/mocks/parentPortal.mock";
 import type { Child, ChildProfile } from "@/types/parentPortal";
+import ConsentCard from "@/components/ui/cards/ConsentCard";
 
 interface ParentPortalProps {
   locked?: boolean;
@@ -18,7 +19,7 @@ interface ParentPortalProps {
 function mapChildProfileToChild(profile: ChildProfile): Child {
   return {
     id: profile.child_id,
-    firstName: profile.child_first_name,  // ✅ cleanly mapped now
+    firstName: profile.child_first_name, // ✅ cleanly mapped now
     profileImageUrl: profile.child_profile_image_url ?? null,
     consentStatus: profile.consent.consent_status,
     lastActiveAt: profile.consent.consent_granted_at ?? "1970-01-01T00:00:00Z",
@@ -28,7 +29,9 @@ function mapChildProfileToChild(profile: ChildProfile): Child {
 
 export default function ParentPortal({ locked = false }: ParentPortalProps) {
   // Transform mock data into Child[]
-  const children: Child[] = mockParentPortal.linked_children.map(mapChildProfileToChild);
+  const children: Child[] = mockParentPortal.linked_children.map(
+    mapChildProfileToChild
+  );
 
   // Sort alphabetically by firstName
   const sortedChildren = [...children].sort((a, b) =>
@@ -79,18 +82,19 @@ export default function ParentPortal({ locked = false }: ParentPortalProps) {
         </div>
       )}
 
-
       {/* Body */}
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-start justify-center p-4">
         {locked ? (
           <p className="text-gray-500">
             🔒 Portal is locked until consent is given.
           </p>
         ) : (
-          <p className="text-gray-900">
-            Welcome, you’re viewing content for{" "}
-            {sortedChildren.find((c) => c.id === selectedChildId)?.firstName}.
-          </p>
+          <div className="w-full max-w-md space-y-4">
+            <ConsentCard
+              status={sortedChildren.find((c) => c.id === selectedChildId)?.consentStatus as "active" | "revoked" | "pending"}
+              timestamp={sortedChildren.find((c) => c.id === selectedChildId)?.lastActiveAt}
+            />
+          </div>
         )}
       </div>
     </div>

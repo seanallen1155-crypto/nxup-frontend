@@ -1,6 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import ConsentStatusPill from "@/components/ui/indicators/ConsentStatusPill";
+import { ParentCTAButton } from "@/components/ui/actions/ParentCTAButton";
+import ConsentRevokeModal from "@/components/ui/modals/ConsentRevokeModal";
+import ParentPortalCard from "@/components/ui/cards/ParentPortalCard";
 
 interface ConsentCardProps {
   status: "active" | "revoked" | "pending";
@@ -8,19 +12,44 @@ interface ConsentCardProps {
 }
 
 export default function ConsentCard({ status, timestamp }: ConsentCardProps) {
-  return (
-    <div className="w-full rounded-lg border border-gray-300 bg-white shadow-sm">
-      {/* Header Row */}
-      <div className="px-4 pt-2 pb-1">
-        <span className="text-caption font-medium text-gray-600 tracking-wide uppercase leading-none">
-          PARENTAL CONSENT
-        </span>
-      </div>
+  const [showRevokeModal, setShowRevokeModal] = useState(false);
 
-      {/* Body */}
-      <div className="px-4 pt-2 pb-4">
-        <ConsentStatusPill status={status} timestamp={timestamp ?? undefined} />
-      </div>
-    </div>
+  const actionLabel = status === "active" ? "Revoke Consent" : "Grant Consent";
+
+  return (
+    <>
+      <ParentPortalCard title="Consent Status">
+        <div className="flex flex-col gap-4">
+          {/* Status pill */}
+          <ConsentStatusPill
+            status={status}
+            timestamp={timestamp ?? undefined}
+          />
+
+          {/* Primary Action */}
+          <ParentCTAButton
+            className="w-full bg-gray-800 hover:bg-gray-900 text-white"
+            onClick={() => {
+              if (status === "active") {
+                setShowRevokeModal(true);
+              } else {
+                console.log("Grant Consent flow not yet implemented");
+              }
+            }}
+          >
+            {actionLabel}
+          </ParentCTAButton>
+        </div>
+      </ParentPortalCard>
+
+      <ConsentRevokeModal
+        open={showRevokeModal}
+        onClose={() => setShowRevokeModal(false)}
+        onConfirm={() => {
+          setShowRevokeModal(false);
+          console.log("Revoke confirmed 🚨 (TODO: backend integration)");
+        }}
+      />
+    </>
   );
 }

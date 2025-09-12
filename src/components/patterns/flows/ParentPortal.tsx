@@ -8,6 +8,8 @@ import ChildAvatar from "@/components/ui/avatars/ChildAvatar";
 import { mockParentPortal } from "@/constants/mocks/parentPortal.mock";
 import type { Child, ChildProfile } from "@/types/parentPortal";
 import ConsentCard from "@/components/ui/cards/ConsentCard";
+import DocumentsCard from "@/components/ui/cards/DocumentsCard";
+
 
 interface ParentPortalProps {
   locked?: boolean;
@@ -90,11 +92,32 @@ export default function ParentPortal({ locked = false }: ParentPortalProps) {
           </p>
         ) : (
           <div className="w-full max-w-md space-y-4">
-            <ConsentCard
-              status={sortedChildren.find((c) => c.id === selectedChildId)?.consentStatus as "active" | "revoked" | "pending"}
-              timestamp={sortedChildren.find((c) => c.id === selectedChildId)?.lastActiveAt}
-            />
-          </div>
+          <ConsentCard
+            status={
+              sortedChildren.find((c) => c.id === selectedChildId)
+                ?.consentStatus as "active" | "revoked" | "pending"
+            }
+            timestamp={
+              sortedChildren.find((c) => c.id === selectedChildId)?.lastActiveAt
+            }
+          />
+
+          <DocumentsCard
+            childId={selectedChildId}
+            documents={[
+              {
+                id: "1",
+                title: "Signed Consent Form (PDF)",
+                timestamp: "Signed Jan 11, 2025",
+              },
+              {
+                id: "2",
+                title: "Privacy Policy Update (PDF)",
+                timestamp: "Updated Feb 5, 2025",
+              },
+            ]}
+          />
+        </div>
         )}
       </div>
     </div>

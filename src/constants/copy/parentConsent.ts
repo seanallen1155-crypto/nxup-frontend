@@ -32,7 +32,7 @@ export const ParentConsentCopy: ParentConsentCopyType = {
       title: "1. Parent/Guardian Authorization",
       bullets: [
         "You are the legal parent or guardian of this student-athlete.",
-        "Your approval creates a valid and enforceable contract on your child’s behalf."
+        "Your approval creates a valid and enforceable contract on {{athleteFullName}}’s behalf."
       ]
     },
     {

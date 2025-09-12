@@ -57,7 +57,10 @@ export default function ParentApprovalPage() {
   };
 
   // Handle backspace
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     if (e.key === "Backspace" && !values[index] && index > 0) {
       inputsRef.current[index - 1]?.focus();
     }
@@ -104,9 +107,24 @@ export default function ParentApprovalPage() {
     <div className="relative min-h-screen w-full flex flex-col bg-white">
       {/* Banner/Header */}
       <div
-        className="w-full h-[160px] relative"
-        style={{ backgroundColor: "#424242" }} // TODO: replace with tokens.colors.brand.teal
+        className="w-full h-[160px] relative shadow-md overflow-hidden"
+        style={{
+          background: "linear-gradient(to bottom, #4A4A4A, #2E2E2E)",
+        }}
       >
+        {/* CSS noise overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "repeating-radial-gradient(circle at center, rgba(255,255,255,0.12) 0, rgba(255,255,255,0.12) 1px, transparent 1px, transparent 100%)",
+            backgroundSize: "3px 3px",
+          }}
+        />
+
+        {/* bottom divider */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-white/10" />
+
         <div className="absolute top-8 left-6 z-10">
           <BrowserLogo theme="dark" variant="wide" />
         </div>
@@ -148,9 +166,7 @@ export default function ParentApprovalPage() {
               {values.map((val, i) => (
                 <InputLight
                   key={i}
-                  ref={(el) => {
-                    inputsRef.current[i] = el;
-                  }}
+                  ref={(el) => (inputsRef.current[i] = el)}
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"
@@ -159,15 +175,10 @@ export default function ParentApprovalPage() {
                   onChange={(e) => handleChange(e.target.value, i)}
                   onKeyDown={(e) => handleKeyDown(e, i)}
                   onPaste={handlePaste}
-                  className={`w-10 sm:w-12 h-12 sm:h-14 px-0 py-0 text-center text-lg sm:text-2xl leading-none 
-                    ${
-                      error
-                        ? "border border-red-500 bg-red-50 text-red-700"
-                        : val
-                        ? "bg-teal-500/20 border border-teal-600 text-teal-700"
-                        : "bg-teal-500/10 border-none text-gray-700"
-                    }
-                  `}
+                  variant="parent"
+                  size="lg"
+                  hasError={!!error}
+                  className="w-10 sm:w-12 h-12 sm:h-14"
                 />
               ))}
             </div>
@@ -222,9 +233,18 @@ export default function ParentApprovalPage() {
       {/* Custom shake animation */}
       <style jsx>{`
         @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          20%, 60% { transform: translateX(-6px); }
-          40%, 80% { transform: translateX(6px); }
+          0%,
+          100% {
+            transform: translateX(0);
+          }
+          20%,
+          60% {
+            transform: translateX(-6px);
+          }
+          40%,
+          80% {
+            transform: translateX(6px);
+          }
         }
         .animate-shake {
           animation: shake 0.4s ease;

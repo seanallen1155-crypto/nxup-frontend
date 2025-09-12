@@ -58,33 +58,33 @@ const config: Config = {
           800: "var(--color-gray-800)",
           900: "var(--color-gray-900)",
         },
-      },
 
-      // Shadows, radii, motion (from tokens)
-      borderRadius: {
-        sm: "var(--radii-sm)",
-        md: "var(--radii-md)",
-        lg: "var(--radii-lg)",
-        full: "var(--radii-full)",
-      },
-      boxShadow: {
-        sm: "var(--shadow-sm)",
-        md: "var(--shadow-md)",
-        lg: "var(--shadow-lg)",
-      },
-      transitionDuration: {
-        fast: "var(--motion-duration-fast)",
-        medium: "var(--motion-duration-medium)",
-        slow: "var(--motion-duration-slow)",
-      },
-      transitionTimingFunction: {
-        in: "var(--motion-ease-in)",
-        out: "var(--motion-ease-out)",
-        inOut: "var(--motion-ease-inOut)",
-      },
-      scale: {
-        tap: "var(--motion-scale-tap)",
-        hover: "var(--motion-scale-hover)",
+        // 🎨 Avatar palette
+        avatar: {
+          teal: {
+            primary: "var(--color-avatar-teal-primary)",
+            light: "var(--color-avatar-teal-light)",
+          },
+          blue: "var(--color-avatar-blue)",
+          indigo: "var(--color-avatar-indigo)",
+          purple: "var(--color-avatar-purple)",
+          slate: "var(--color-avatar-slate)",
+        },
+
+        // 🎨 Parent-facing theme (used for inputs + parent UI)
+        parent: {
+          teal: {
+            bgInactive: "var(--color-parent-teal-bgInactive)",
+            bgActive: "var(--color-parent-teal-bgActive)",
+            border: "var(--color-parent-teal-border)",
+            text: "var(--color-parent-teal-text)",
+          },
+          error: {
+            border: "var(--color-parent-error-border)",
+            bg: "var(--color-parent-error-bg)",
+            text: "var(--color-parent-error-text)",
+          },
+        },
       },
     },
   },

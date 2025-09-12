@@ -7,11 +7,13 @@ import { ParentConsentCopy } from "@/constants/copy/parentConsent";
 import { renderText } from "@/utils/renderText";
 import { Check } from "lucide-react";
 import { ParentCTAButton } from "@/components/ui/actions/ParentCTAButton";
+import { ConsentModal } from "@/components/ui/modals/ConsentModal";
 
 export default function ParentApprovalConsentPage() {
   const router = useRouter();
   const [checked, setChecked] = useState(false);
   const [pulse, setPulse] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // Mocked runtime values (later from backend / context)
   const runtimeVars = {
@@ -27,7 +29,6 @@ export default function ParentApprovalConsentPage() {
 
   const handleApproveClick = () => {
     if (!checked) {
-      // Trigger pulse animation on checkbox
       setPulse(true);
       setTimeout(() => setPulse(false), 600);
       return;
@@ -39,9 +40,24 @@ export default function ParentApprovalConsentPage() {
     <div className="min-h-screen w-full flex flex-col bg-white">
       {/* Header */}
       <div
-        className="w-full h-16 relative flex items-center"
-        style={{ backgroundColor: "#424242" }}
+        className="w-full h-16 relative flex items-center shadow-md overflow-hidden"
+        style={{
+          background: "linear-gradient(to bottom, #4A4A4A, #2E2E2E)",
+        }}
       >
+        {/* CSS noise overlay */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "repeating-radial-gradient(circle at center, rgba(255,255,255,0.12) 0, rgba(255,255,255,0.12) 1px, transparent 1px, transparent 100%)",
+            backgroundSize: "3px 3px",
+          }}
+        />
+
+        {/* bottom divider */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-white/10" />
+
         <div className="absolute left-6">
           <BrowserLogo theme="dark" variant="wide" className="h-8 w-auto" />
         </div>
@@ -89,14 +105,21 @@ export default function ParentApprovalConsentPage() {
           {renderText(ParentConsentCopy.closing, runtimeVars)}
         </p>
 
-        {/* FAQ Link */}
-        <div>
+        {/* FAQ + View Full Agreement Links */}
+        <div className="flex flex-col gap-2">
           <button
             type="button"
-            className="text-sm text-blue-600 underline cursor-pointer"
+            className="text-sm text-blue-600 underline cursor-pointer text-left"
             onClick={() => router.push("/faq")}
           >
             View Consent FAQ
+          </button>
+          <button
+            type="button"
+            className="text-sm text-blue-600 underline cursor-pointer text-left"
+            onClick={() => setShowModal(true)}
+          >
+            View Full Agreement
           </button>
         </div>
       </main>
@@ -135,6 +158,13 @@ export default function ParentApprovalConsentPage() {
           </ParentCTAButton>
         </div>
       </div>
+
+      {/* Modal */}
+      <ConsentModal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        runtimeVars={runtimeVars}
+      />
 
       {/* Custom pulse animation */}
       <style jsx>{`

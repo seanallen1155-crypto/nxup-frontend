@@ -37,6 +37,33 @@ export const tokens = {
       800: "#424242",
       900: "#212121",
     },
+
+    // 🎨 Avatar Color Palette (deterministic assignment by child_id)
+    avatar: {
+      teal: {
+        primary: "#0D9488", // Tailwind teal-600
+        light: "#5EEAD4",   // Tailwind teal-300
+      },
+      blue: "#2563EB",      // Tailwind blue-600
+      indigo: "#4F46E5",    // Tailwind indigo-600
+      purple: "#9333EA",    // Tailwind purple-600
+      slate: "#475569",     // Tailwind slate-600 (fallback)
+    },
+
+    // 🎨 Parent-facing theme (used for OTP inputs + other parent UI elements)
+    parent: {
+      teal: {
+        bgInactive: "#CCFBF1", // teal-100 — very light, input empty
+        bgActive: "#99F6E4",   // teal-200 — input filled
+        border: "#0D9488",     // teal-600 — focus border
+        text: "#0F766E",       // teal-700 — filled text
+      },
+      error: {
+        border: "#DC2626",     // red-600
+        bg: "#FEE2E2",         // red-200
+        text: "#B91C1C",       // red-700
+      },
+    },
   },
 
   typography: {
@@ -87,11 +114,7 @@ export const tokens = {
     easing: {
       in: "cubic-bezier(0.4, 0, 1, 1)",
       out: "cubic-bezier(0, 0, 0.2, 1)",
-      inOut: "cubic-bezier(0.4, 0, 0, 0.2, 1)",
-    },
-    scale: {
-      tap: "0.96",
-      hover: "1.02",
+      inOut: "cubic-bezier(0.4, 0, 0.2, 1)",
     },
   },
-} as const;
+};

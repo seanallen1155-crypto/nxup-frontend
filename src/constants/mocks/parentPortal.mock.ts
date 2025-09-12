@@ -1,41 +1,32 @@
-import { ParentPortalData } from "@/types/parentPortal";
+// src/constants/mocks/parentPortal.mock.ts
+import type { ParentPortalData } from "@/types/parentPortal";
 
 export const mockParentPortal: ParentPortalData = {
-  parent_id: "parent_123",
-  parent_name: "Jane Doe",
   linked_children: [
     {
-      child_id: "child_001",
-      child_name: "Alex Doe",
-      child_sport: "Basketball",
-      child_profile_image_url: "https://example.com/alex.png",
+      child_id: "1",
+      child_first_name: "Jordan",
+      child_last_name: "Doe",
+      child_profile_image_url: null,
       consent: {
         consent_status: "active",
-        consent_granted_at: "2025-09-10T12:00:00Z",
-        consent_revoked_at: null,
-        consent_document_url: "https://example.com/docs/consent_child_001.pdf",
+        consent_granted_at: "2023-10-15T12:34:56Z",
       },
       activity_snapshot: {
-        activity_status: "active",
-        brand_builder_status: "active",
-        merch_store_status: "preview",
+        deal_count: 1,
       },
     },
     {
-      child_id: "child_002",
-      child_name: "Jordan Doe",
-      child_sport: "Soccer",
-      child_profile_image_url: "https://example.com/jordan.png",
+      child_id: "2",
+      child_first_name: "Maya",
+      child_last_name: "Smith",
+      child_profile_image_url: "https://example.com/maya.png",
       consent: {
         consent_status: "pending",
         consent_granted_at: null,
-        consent_revoked_at: null,
-        consent_document_url: null,
       },
       activity_snapshot: {
-        activity_status: "inactive",
-        brand_builder_status: "not_started",
-        merch_store_status: "not_created",
+        deal_count: 0,
       },
     },
   ],

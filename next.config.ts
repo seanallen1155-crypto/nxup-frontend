@@ -36,6 +36,16 @@ const nextConfig: NextConfig = {
       process.env.NEXT_PUBLIC_API_URL ||
       "https://nxup-backend-641628834151.us-central1.run.app",
   },
+
+  // ✅ Allow remote images for mock data
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "example.com", // used in mockParentPortal
+      },
+    ],
+  },
 };
 
 export default nextConfig;

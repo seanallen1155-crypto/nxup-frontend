@@ -1,7 +1,7 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
-import { Manrope, Inter } from "next/font/google";
+import { satoshi, teko } from "./fonts"; // ✅ custom font setup
 
 // ✅ Add axe-core in dev mode with confirmation log
 if (process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
@@ -16,18 +16,6 @@ if (process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
   console.log("✅ axe-core/react accessibility scanner initialized");
 }
 
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "NXUP",
   description: "Your game. Your brand. Your NIL.",
@@ -41,10 +29,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${manrope.variable} ${inter.variable}`}
+      className={`${satoshi.variable} ${teko.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-bg-light text-text-primaryLight antialiased font-sans">
+      <body
+        className="antialiased"
+        style={{
+          fontFamily: "var(--font-satoshi), sans-serif", // TODO: promote to tokens (font family)
+          backgroundColor: "#FFFFFF", // TODO: promote to tokens (light surface tier0)
+          color: "#0E0E0E", // TODO: promote to tokens (neutral ink/primary text)
+        }}
+      >
         {children}
       </body>
     </html>

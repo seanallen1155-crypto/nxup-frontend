@@ -1,3 +1,6 @@
+// TODO: once Landing Page specs are validated, refactor inline brand styles into tokens.ts
+// and re-map them here for Tailwind class usage.
+
 import type { Config } from "tailwindcss";
 
 const config: Config = {

@@ -1,4 +1,4 @@
-import { LandingPage } from "@/components/patterns/flows/LandingPage";
+import LandingPage from "@/components/patterns/flows/LandingPage";
 
 export default function Page() {
   return <LandingPage />;

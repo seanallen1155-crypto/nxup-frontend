@@ -1,9 +1,89 @@
-@import "../styles/tokens.css";
+/* Removed tokens.css import — testing exact brand specs, no tokens for now */
 
+/* Tailwind resets + utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ----------------------------------------
+   Font: Satoshi (all weights, woff2 only)
+----------------------------------------- */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi/Satoshi-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi/Satoshi-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi/Satoshi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi/Satoshi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi/Satoshi-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/satoshi/Satoshi-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ----------------------------------------
+   Font variables (linked in layout.tsx)
+----------------------------------------- */
+:root {
+  --font-body: var(--font-satoshi); /* TODO: promote to tokens (body font) */
+  --font-display: var(--font-teko); /* TODO: promote to tokens (display font) */
+}
+
+/* ----------------------------------------
+   Base document styles
+----------------------------------------- */
+html,
+body {
+  font-family: var(--font-body), sans-serif; /* TODO: promote to tokens */
+  background-color: #FFFFFF; /* TODO: promote to tokens (surface.light.tier0) */
+  color: #0E0E0E; /* TODO: promote to tokens (neutral ink) */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings default to display font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), sans-serif; /* TODO: promote to tokens */
+}
+
+/* ----------------------------------------
+   Animation: wipe
+----------------------------------------- */
 @keyframes wipe {
   0% {
     transform: translateX(-100%);

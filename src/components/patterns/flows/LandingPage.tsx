@@ -1,103 +1,251 @@
-// src/components/patterns/flows/LandingPage.tsx
-
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import styles from "./LandingPage.module.css";
+import { CaretRight } from "@phosphor-icons/react";
 
-import { BrowserLogo } from "@ui/logo/BrowserLogo";
-import { BrowserFooter } from "@ui/footer/BrowserFooter";
-import { PrimaryCTAButton } from "@ui/actions/PrimaryCTAButton";
-import { EligibilityFlow } from "@features/onboarding/EligibilityFlow";
-
-export function LandingPage() {
-  const [showFlow, setShowFlow] = useState(false);
-
-  if (showFlow) {
-    return <EligibilityFlow />;
-  }
+export default function LandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen w-full flex flex-col">
+    <section
+      id="hero"
+      className="relative min-h-screen w-full overflow-hidden flex flex-col justify-between"
+      style={{
+        backgroundColor: "#000000", // TODO: promote to tokens (fallback bg behind image)
+      }}
+    >
       {/* Background image */}
       <Image
-        src="/images/landing/athlete.png"
-        alt="Athlete background"
+        src="/images/landing/hero-athlete-v2.jpg"
+        alt="High school athlete hero background"
         fill
-        className="object-cover"
         priority
+        className="object-cover object-[60%] md:object-center"
       />
 
-      {/* Gradient overlay */}
+      {/* Left scrim gradient */}
       <div
         className="absolute inset-0"
         style={{
-          opacity: 0.55,
           background:
-            "linear-gradient(180deg, #0D0D0D 10%, #1E1E1E 35%, #1E1E1E 65%, #0D0D0D 100%)",
+            "linear-gradient(90deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 40%)",
+          zIndex: 1,
         }}
-        aria-hidden="true"
-      />
-
-      {/* Logo (explicit positioning for Landing page) */}
-      <div className="absolute top-6 left-6 z-10">
-        <BrowserLogo theme="dark" variant="wide" />
+      >
+        <style jsx>{`
+          @media (min-width: 768px) {
+            div {
+              background: linear-gradient(
+                90deg,
+                rgba(0, 0, 0, 0.5) 0%,
+                rgba(0, 0, 0, 0) 30%
+              );
+            }
+          }
+        `}</style>
       </div>
 
-      {/* Hero Card */}
+      {/* Bottom fade gradient */}
       <div
-        className={`${styles.heroCard} absolute left-1/2 -translate-x-1/2 z-10
-                    w-[90vw] max-w-[1065px] rounded-md px-lg py-xl`}
-        style={{ top: "53vh" }}
-      >
-        <h1
-          className="font-serif font-semibold text-center leading-tight mt-4 relative z-10"
-          style={{ fontSize: "26px", lineHeight: "1.2", color: "#FFFFFF" }}
-        >
-          Your NIL Journey
-          <br />
-          Starts Here
-        </h1>
+        className="absolute inset-x-0 bottom-0"
+        style={{
+          height: "60vh", // ✅ always extends up ~60% of viewport height
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.65) 100%)",
+          zIndex: 1,
+        }}
+      />
 
-        <p
-          className="font-primary text-center font-normal relative z-10"
+      {/* Header with top scrim + faded logo */}
+      <header
+        className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-3"
+        style={{
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 64px)", // ✅ subtle scrim bar
+          backdropFilter: "blur(4px)",
+          WebkitBackdropFilter: "blur(4px)",
+          zIndex: 2,
+        }}
+      >
+        <Image
+          src="/images/logos/wide-dark.svg"
+          alt="NXUP Logo"
+          width={160}
+          height={40}
           style={{
-            fontSize: "15px",
-            lineHeight: "1.3",
-            color: "#B3B3B3",
-            marginTop: "10px",
+            height: "clamp(28px, 6vw, 40px)",
+            width: "auto",
+            opacity: 0.8, // ✅ reduced to sit back
+            transition: "opacity 0.2s ease-in-out, transform 0.2s ease-in-out",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = "1";
+            e.currentTarget.style.transform = "scale(1.02)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = "0.8";
+            e.currentTarget.style.transform = "scale(1)";
+          }}
+          priority
+        />
+
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+          className="p-2"
+          style={{
+            color: "#FFFFFF",
+            fontSize: "24px",
+            opacity: 0.8,
+            transition: "opacity 0.2s ease-in-out, transform 0.2s ease-in-out",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.opacity = "1";
+            e.currentTarget.style.transform = "scale(1.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.opacity = "0.8";
+            e.currentTarget.style.transform = "scale(1)";
           }}
         >
-          Built for high school athletes.
-          <br />
-          Free, supportive, and always in your control.
+          ☰
+        </button>
+      </header>
+
+      {/* Overlay behind drawer */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setMenuOpen(false)}
+      />
+
+      {/* Nav drawer with animation */}
+      <div
+        className={`fixed top-0 right-0 h-full w-2/3 max-w-sm z-50 flex flex-col p-6 transform transition-all duration-300 ease-in-out ${
+          menuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+        }`}
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(20,20,20,0.8) 0%, rgba(20,20,20,0.6) 100%)", // ✅ consistent dark gradient
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={() => setMenuOpen(false)}
+          aria-label="Close menu"
+          className="self-end p-4 text-white/80 hover:text-white transition-colors duration-200 text-2xl"
+        >
+          ✕
+        </button>
+
+        {/* Nav links */}
+        <nav className="flex flex-col gap-6 mt-8">
+          {"Athletes Parents Sponsors".split(" ").map((link, i) => (
+            <a
+              key={link}
+              href={`#${link.toLowerCase()}`}
+              className="text-white hover:text-[#FF5A1F] transition-colors duration-300"
+              style={{
+                fontFamily: "var(--font-satoshi, sans-serif)",
+                fontWeight: 500,
+                fontSize: "18px",
+                textDecoration: "none",
+                transitionDelay: `${i * 75}ms`,
+              }}
+            >
+              {link}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      {/* Hero text + CTA */}
+      <div
+        className="absolute left-6 right-6"
+        style={{
+          top: "25%",
+          maxWidth: "65%",
+          zIndex: 2,
+        }}
+      >
+        {/* Headline */}
+        <h1
+          style={{
+            fontFamily: "var(--font-teko), sans-serif",
+            fontWeight: 700,
+            fontSize: "clamp(32px, 8vw, 64px)", // ✅ responsive typography
+            lineHeight: "100%",
+            letterSpacing: "-0.01em",
+            color: "var(--text-hero, #FFFFFF)",
+            textTransform: "uppercase",
+            textShadow: "0px 2px 4px rgba(0,0,0,0.4)",
+          }}
+        >
+          Your Story, Your Stage, Your NIL
+        </h1>
+
+        {/* Subtext */}
+        <p
+          style={{
+            fontFamily: "var(--font-satoshi, sans-serif)",
+            fontWeight: 600, // ✅ bumped for hierarchy
+            fontSize: "clamp(16px, 4vw, 20px)", // ✅ responsive
+            lineHeight: "140%",
+            letterSpacing: "0.01em",
+            color: "rgba(255,255,255,0.9)",
+            textShadow: "0px 1px 3px rgba(0,0,0,0.4)",
+          }}
+        >
+          Every high school athlete deserves to earn.
         </p>
 
         {/* CTA Button */}
-        <div className="flex justify-center relative z-10 mt-6 mb-2">
-          <PrimaryCTAButton onClick={() => setShowFlow(true)}>
-            Start my NIL journey
-          </PrimaryCTAButton>
-        </div>
-
-        {/* Secondary Login Link */}
-        <p
-          className="font-primary text-center font-light mb-4 relative z-10 text-gray-400"
+        <button
+          className="flex items-center justify-center gap-2 rounded-md shadow-lg"
           style={{
-            fontSize: "12px",
-            lineHeight: "1.3",
-            marginTop: "8px",
+            marginTop: "16px",
+            padding: "14px 24px",
+            fontFamily: "var(--font-satoshi, sans-serif)",
+            fontWeight: 600,
+            fontSize: "clamp(16px, 1.5vw, 18px)",
+            lineHeight: "140%",
+            letterSpacing: "0em",
+            color: "#FFFFFF",
+            background: "linear-gradient(90deg, #FF5A1F 0%, #E64500 100%)",
+            textShadow: "0px 1px 2px rgba(0,0,0,0.25)",
+            borderRadius: "8px",
+            transition: "all 0.2s ease-in-out",
           }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background =
+              "linear-gradient(90deg, #E64500 0%, #CC3A00 100%)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background =
+              "linear-gradient(90deg, #FF5A1F 0%, #E64500 100%)";
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.outline = "2px solid rgba(255,255,255,0.6)";
+            e.currentTarget.style.outlineOffset = "2px";
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = "none";
+          }}
+          disabled={false}
         >
-          Already a user?{" "}
-          <span className="font-semibold cursor-pointer">Login</span>
-        </p>
+          Claim my NIL deal
+          <CaretRight
+            size={20}
+            weight="bold"
+            color="#FFFFFF"
+            aria-hidden="true"
+          />
+        </button>
       </div>
-
-      {/* Footer (reusable) */}
-      <BrowserFooter theme="dark" />
-    </div>
+    </section>
   );
 }

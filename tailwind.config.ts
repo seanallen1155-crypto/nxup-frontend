@@ -1,90 +1,96 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./stories/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
-      // Typography aliases from tokens
-      fontSize: {
-        hero: "var(--font-fontSize-hero)",
-        "h1-lg": "var(--font-fontSize-h1_lg)",
-        "h1-xl": "var(--font-fontSize-h1_xl)",
-        "h1-2xl": "var(--font-fontSize-h1_2xl)",
-        body: "var(--font-fontSize-body)",
-        caption: "var(--font-fontSize-caption)",
-      },
-      fontFamily: {
-        primary: "var(--font-fontFamily-primary)",
-        accent: "var(--font-fontFamily-accent)",
-        // 🔥 Add serif for hero headline
-        serif: ["Georgia", "serif"],
-      },
-
-      // Color aliases from tokens
       colors: {
+        // Example: background + brand
         bg: {
           light: "var(--color-bg-light)",
           lightAlt: "var(--color-bg-lightAlt)",
           dark: "var(--color-bg-dark)",
           darkAlt: "var(--color-bg-darkAlt)",
         },
-        text: {
-          primaryLight: "var(--color-text-primaryLight)",
-          secondaryLight: "var(--color-text-secondaryLight)",
-          primaryDark: "var(--color-text-primaryDark)",
-          secondaryDark: "var(--color-text-secondaryDark)",
-        },
-        brand: {
-          primary: "var(--color-brand-primary)",
-          primaryHover: "var(--color-brand-primaryHover)",
-          secondary: "var(--color-brand-secondary)",
-          secondaryHover: "var(--color-brand-secondaryHover)",
-          // 🔥 New accent orange
-          accent: "var(--color-brand-accent)",
-          accentHover: "var(--color-brand-accentHover)",
-        },
         gray: {
           100: "var(--color-gray-100)",
           200: "var(--color-gray-200)",
           300: "var(--color-gray-300)",
           400: "var(--color-gray-400)",
-          450: "var(--color-gray-450, #A0A0A0)", // mid-gray fallback
+          450: "var(--color-gray-450)",
           500: "var(--color-gray-500)",
           600: "var(--color-gray-600)",
           700: "var(--color-gray-700)",
           800: "var(--color-gray-800)",
           900: "var(--color-gray-900)",
         },
-
-        // 🎨 Avatar palette
-        avatar: {
-          teal: {
-            primary: "var(--color-avatar-teal-primary)",
-            light: "var(--color-avatar-teal-light)",
-          },
-          blue: "var(--color-avatar-blue)",
-          indigo: "var(--color-avatar-indigo)",
-          purple: "var(--color-avatar-purple)",
-          slate: "var(--color-avatar-slate)",
+        brand: {
+          primary: "var(--color-brand-primary)",
+          primaryHover: "var(--color-brand-primaryHover)",
+          secondary: "var(--color-brand-secondary)",
+          secondaryHover: "var(--color-brand-secondaryHover)",
+          accent: "var(--color-brand-accent)",
+          accentHover: "var(--color-brand-accentHover)",
         },
-
-        // 🎨 Parent-facing theme (used for inputs + parent UI)
-        parent: {
-          teal: {
-            bgInactive: "var(--color-parent-teal-bgInactive)",
-            bgActive: "var(--color-parent-teal-bgActive)",
-            border: "var(--color-parent-teal-border)",
-            text: "var(--color-parent-teal-text)",
-          },
-          error: {
-            border: "var(--color-parent-error-border)",
-            bg: "var(--color-parent-error-bg)",
-            text: "var(--color-parent-error-text)",
-          },
-        },
+      },
+      borderRadius: {
+        sm: "var(--radii-sm)",
+        md: "var(--radii-md)",
+        lg: "var(--radii-lg)",
+        full: "var(--radii-full)",
+      },
+      boxShadow: {
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+      },
+      fontFamily: {
+        inter: ["var(--typography-font-family-primary)", "sans-serif"],
+        accent: ["var(--typography-font-family-accent)", "sans-serif"],
+        serif: ["var(--typography-font-family-serif)", "serif"],
+      },
+      fontWeight: {
+        regular: "var(--typography-font-weight-regular)",
+        medium: "var(--typography-font-weight-medium)",
+        bold: "var(--typography-font-weight-bold)",
+      },
+      fontSize: {
+        hero: [
+          "var(--typography-font-size-hero)",
+          { lineHeight: "var(--typography-line-height-hero)" },
+        ],
+        h1_lg: [
+          "var(--typography-font-size-h1-lg)",
+          { lineHeight: "var(--typography-line-height-h1-lg)" },
+        ],
+        h1_xl: [
+          "var(--typography-font-size-h1-xl)",
+          { lineHeight: "var(--typography-line-height-h1-xl)" },
+        ],
+        h1_2xl: [
+          "var(--typography-font-size-h1-2xl)",
+          { lineHeight: "var(--typography-line-height-h1-2xl)" },
+        ],
+        h2: [
+          "var(--typography-font-size-h2)",
+          { lineHeight: "var(--typography-line-height-h2)" },
+        ],
+        h2_lg: [
+          "var(--typography-font-size-h2-lg)",
+          { lineHeight: "var(--typography-line-height-h2-lg)" },
+        ],
+        h3: [
+          "var(--typography-font-size-h3)",
+          { lineHeight: "var(--typography-line-height-h3)" },
+        ],
+        body: [
+          "var(--typography-font-size-body)",
+          { lineHeight: "var(--typography-line-height-body)" },
+        ],
+        caption: [
+          "var(--typography-font-size-caption)",
+          { lineHeight: "var(--typography-line-height-caption)" },
+        ],
       },
     },
   },

@@ -58,6 +58,16 @@ export default function ParentPortal({ locked = false }: ParentPortalProps) {
         </div>
       </div>
 
+      {/* Section Header */}
+      <div className="w-full px-6 mt-6 mb-4">
+        <h2 className="font-inter font-bold tracking-tight text-h2_lg text-gray-800">
+          Parent Portal
+        </h2>
+        <p className="font-inter font-regular text-caption text-gray-600 mt-1">
+          Secure access to your family account
+        </p>
+      </div>
+
       {/* Child Selector */}
       {!locked && (
         <div

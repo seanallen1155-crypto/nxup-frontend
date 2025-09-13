@@ -66,30 +66,24 @@ export const tokens = {
     },
   },
 
-  typography: {
-    fontFamily: {
-      primary: "'Inter', sans-serif",
-      accent: "'Bebas Neue', sans-serif",
-      serif: "'Georgia', serif", // 🔥 New serif font for premium headlines
-    },
-    fontWeight: {
-      regular: "400",
-      medium: "500",
-      bold: "700",
-    },
-    fontSize: {
-      hero: "32px", // UX spec for mobile-first hero headline
-      h1_lg: "40px",
-      h1_xl: "48px",
-      h1_2xl: "56px",
-      body: "16px",
-      caption: "14px",
-    },
-    lineHeight: {
-      hero: "1.2",
-      body: "1.4",
-      caption: "1.3",
-    },
+  fontSize: {
+    hero: "32px",
+    h1_lg: "40px",
+    h1_xl: "48px",
+    h1_2xl: "56px",
+    h2: "24px",        // 👈 New token for section headers
+    h2_lg: "28px",   // 👈 new size for section anchors
+    h3: "20px",        // 👈 Optional: if you want a smaller scale
+    body: "16px",
+    caption: "14px",
+  },
+  lineHeight: {
+    hero: "1.2",
+    h2: "1.3",         // tighter than body
+    h2_lg: "1.3",
+    h3: "1.3",
+    body: "1.4",
+    caption: "1.3",
   },
 
   radii: {

@@ -1,42 +1,33 @@
 // scripts/generate-tokens.js
-const path = require("path");
 const fs = require("fs");
-const { execSync } = require("child_process");
+const path = require("path");
+const tokens = require("../tokens.ts").default;
 
-// Compile tokens.ts to a temporary JS file
-execSync("npx tsc tokens.ts --module commonjs --target es2019 --outDir .tmp-tokens", { stdio: "inherit" });
-
-// Import the compiled JS
-const mod = require(path.join(process.cwd(), ".tmp-tokens", "tokens.js"));
-const tokens = mod.tokens; // 👈 your actual export
-
-// Debug log to see actual exports
-console.log("DEBUG tokens.ts exports:", Object.keys(tokens));
-
-let css = "/* generated from tokens.ts */\n:root {\n";
-
-function emit(prefix, obj) {
-  if (!obj) return;
-  for (const [key, value] of Object.entries(obj)) {
-    if (typeof value === "object" && value !== null) {
-      // recurse deeper
-      emit(`${prefix}-${key}`, value);
-    } else {
-      css += `  --${prefix}-${key}: ${value};\n`;
-    }
-  }
+// Convert camelCase to kebab-case
+function toKebabCase(str) {
+  return str.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
 
-emit("color", tokens.colors);
-emit("radii", tokens.radii);
-emit("shadow", tokens.shadows);
-emit("font", tokens.typography);
-emit("motion", tokens.motion);
+function generateCSSVars(obj, prefix = "--") {
+  let cssVars = "";
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === "object") {
+      cssVars += generateCSSVars(value, `${prefix}${toKebabCase(key)}-`);
+    } else {
+      cssVars += `  ${prefix}${toKebabCase(key)}: ${value};\n`;
+    }
+  }
+  return cssVars;
+}
 
-css += "}\n";
+function buildTokens() {
+  const css = `/* generated from tokens.ts */\n:root {\n${generateCSSVars(
+    tokens
+  )}}\n`;
 
-const outFile = path.join(process.cwd(), "src", "styles", "tokens.css");
-fs.mkdirSync(path.dirname(outFile), { recursive: true });
-fs.writeFileSync(outFile, css);
+  const outPath = path.resolve(__dirname, "../src/styles/tokens.css");
+  fs.writeFileSync(outPath, css);
+  console.log("✅ tokens.css regenerated at", outPath);
+}
 
-console.log("✔ tokens.css generated");
+buildTokens();

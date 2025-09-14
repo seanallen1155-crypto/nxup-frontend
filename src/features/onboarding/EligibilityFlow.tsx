@@ -11,21 +11,16 @@ import { StepIneligibleNotHS } from "./steps/StepIneligibleNotHS";
 import { StepIneligibleCollege } from "./steps/StepIneligibleCollege";
 import { StepIneligibleState } from "./steps/StepIneligibleState";
 import { StepIneligibleExit } from "./steps/StepIneligibleExit";
-import { StepTracker } from "@ui/feedback/StepTracker";
-import { EligibilityConfirmedBar } from "@ui/feedback/EligibilityConfirmedBar";
-import { IneligibleBar } from "@ui/feedback/IneligibleBar";
-import { Lock, GraduationCap, School, MapPin } from "lucide-react";
 import { OnboardingContainer } from "./OnboardingContainer";
 
 export function EligibilityFlow() {
-  // 👇 start at "step 0" which renders nothing
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const totalSteps = 3;
+  // start at step 1 so we actually see content immediately
+  const [currentStep, setCurrentStep] = useState<number>(1);
 
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return null; // 🚀 empty step just shows container
+        return null;
       case 1:
         return <StepDOB onNext={() => setCurrentStep(2)} />;
       case 2:
@@ -47,54 +42,13 @@ export function EligibilityFlow() {
       case 10:
         return <StepIneligibleExit />;
       default:
-        return <p>Unknown step</p>;
+        return <p style={{ color: "white" }}>Unknown step</p>;
     }
   };
 
   return (
-    <OnboardingContainer>
-      {/* 🚫 No tracker/bars shown in step 0 */}
-      {currentStep !== 0 && (
-        <>
-          {currentStep < 4 && currentStep < 6 && (
-            <div className="mt-6 self-center min-h-[40px] flex items-center">
-              <StepTracker
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-                onBack={() => setCurrentStep((s) => Math.max(1, s - 1))}
-              />
-            </div>
-          )}
-          {currentStep === 4 && (
-            <div className="mt-6 self-center min-h-[40px] flex items-center">
-              <EligibilityConfirmedBar />
-            </div>
-          )}
-          {currentStep === 6 && (
-            <div className="mt-6 self-center min-h-[40px] flex items-center">
-              <IneligibleBar icon={Lock} />
-            </div>
-          )}
-          {currentStep === 7 && (
-            <div className="mt-6 self-center min-h-[40px] flex items-center">
-              <IneligibleBar icon={GraduationCap} />
-            </div>
-          )}
-          {currentStep === 8 && (
-            <div className="mt-6 self-center min-h-[40px] flex items-center">
-              <IneligibleBar icon={School} />
-            </div>
-          )}
-          {currentStep === 9 && (
-            <div className="mt-6 self-center min-h-[40px] flex items-center">
-              <IneligibleBar icon={MapPin} />
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Step content */}
-      {renderStep()}
-    </OnboardingContainer>
-  );
+  <OnboardingContainer currentStep={currentStep} totalSteps={3}>
+    {renderStep()}
+  </OnboardingContainer>
+);
 }

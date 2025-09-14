@@ -96,3 +96,16 @@ h1, h2, h3, h4, h5, h6 {
 .animate-wipe {
   animation: wipe 1.5s ease-in-out forwards;
 }
+
+/* ----------------------------------------
+   Onboarding Card Base (clean baseline)
+   Purpose:
+   - Translucent glass-like container
+   - No highlight overlays, no blend modes
+   Usage:
+   - Apply `className="onboarding-card"` to your card
+----------------------------------------- */
+.onboarding-card {
+  position: relative;
+  overflow: hidden; /* keeps any future children contained */
+}

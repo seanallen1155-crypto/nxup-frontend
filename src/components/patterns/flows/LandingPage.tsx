@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation"; // ✅ added
 import { CaretRight } from "@phosphor-icons/react";
 
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter(); // ✅ hook for navigation
 
   return (
     <section
@@ -62,21 +63,21 @@ export default function LandingPage() {
       <header
         className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-3"
         style={{
-          background: "linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 64px)", // ✅ subtle scrim bar
+          background: "linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 64px)",
           backdropFilter: "blur(4px)",
           WebkitBackdropFilter: "blur(4px)",
           zIndex: 2,
         }}
       >
         <Image
-          src="/images/logos/wide-dark.svg"
-          alt="NXUP Logo"
+          src="/images/logos/NILJourney_Logo_Horizontal_Reverse.svg"
+          alt="nil Journey Logo"
           width={160}
           height={40}
           style={{
             height: "clamp(28px, 6vw, 40px)",
             width: "auto",
-            opacity: 0.8, // ✅ reduced to sit back
+            opacity: 0.8,
             transition: "opacity 0.2s ease-in-out, transform 0.2s ease-in-out",
           }}
           onMouseEnter={(e) => {
@@ -128,7 +129,7 @@ export default function LandingPage() {
         }`}
         style={{
           background:
-            "linear-gradient(to bottom, rgba(20,20,20,0.8) 0%, rgba(20,20,20,0.6) 100%)", // ✅ consistent dark gradient
+            "linear-gradient(to bottom, rgba(20,20,20,0.8) 0%, rgba(20,20,20,0.6) 100%)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
         }}
@@ -177,7 +178,7 @@ export default function LandingPage() {
           style={{
             fontFamily: "var(--font-teko), sans-serif",
             fontWeight: 700,
-            fontSize: "clamp(32px, 8vw, 64px)", // ✅ responsive typography
+            fontSize: "clamp(32px, 8vw, 64px)",
             lineHeight: "100%",
             letterSpacing: "-0.01em",
             color: "var(--text-hero, #FFFFFF)",
@@ -191,24 +192,26 @@ export default function LandingPage() {
         {/* Subtext */}
         <p
           style={{
+            marginTop: "16px", // spacing below headline
             fontFamily: "var(--font-satoshi, sans-serif)",
-            fontWeight: 600, // ✅ bumped for hierarchy
-            fontSize: "clamp(16px, 4vw, 20px)", // ✅ responsive
-            lineHeight: "140%",
+            fontWeight: 600,
+            fontSize: "clamp(16px, 4vw, 20px)",
+            lineHeight: "135%", // compact but readable
             letterSpacing: "0.01em",
             color: "rgba(255,255,255,0.9)",
             textShadow: "0px 1px 3px rgba(0,0,0,0.4)",
+            maxWidth: "80%", // ✅ constrain on smallest viewports
           }}
         >
-          Every high school athlete deserves to earn.
+          Built for all high school athletes to start their NIL journey.
         </p>
 
         {/* CTA Button */}
         <button
-          className="flex items-center justify-center gap-2 rounded-md shadow-lg"
+          className="flex items-center justify-center gap-2 rounded-md"
           style={{
-            marginTop: "16px",
-            padding: "14px 24px",
+            marginTop: "28px", // clear action gap
+            padding: "16px 28px", // stronger anchor
             fontFamily: "var(--font-satoshi, sans-serif)",
             fontWeight: 600,
             fontSize: "clamp(16px, 1.5vw, 18px)",
@@ -219,14 +222,26 @@ export default function LandingPage() {
             textShadow: "0px 1px 2px rgba(0,0,0,0.25)",
             borderRadius: "8px",
             transition: "all 0.2s ease-in-out",
+            boxShadow: "0px 4px 12px rgba(255, 90, 31, 0.4)", // stronger depth
           }}
+          onClick={() => router.push("/onboarding")} // ✅ wired to onboarding
           onMouseEnter={(e) => {
             e.currentTarget.style.background =
-              "linear-gradient(90deg, #E64500 0%, #CC3A00 100%)";
+              "linear-gradient(90deg, #FF7A3F 0%, #FF5A1F 100%)"; // lighter hover
+            e.currentTarget.querySelector("svg")!.style.transform =
+              "translateX(4px)"; // chevron shift
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background =
               "linear-gradient(90deg, #FF5A1F 0%, #E64500 100%)";
+            e.currentTarget.querySelector("svg")!.style.transform =
+              "translateX(0)";
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.transform = "scale(0.97)"; // active compress
+          }}
+          onMouseUp={(e) => {
+            e.currentTarget.style.transform = "scale(1)";
           }}
           onFocus={(e) => {
             e.currentTarget.style.outline = "2px solid rgba(255,255,255,0.6)";
@@ -237,12 +252,13 @@ export default function LandingPage() {
           }}
           disabled={false}
         >
-          Claim my NIL deal
+          Start my NIL journey
           <CaretRight
             size={20}
             weight="bold"
             color="#FFFFFF"
             aria-hidden="true"
+            style={{ transition: "transform 0.2s ease-in-out" }}
           />
         </button>
       </div>

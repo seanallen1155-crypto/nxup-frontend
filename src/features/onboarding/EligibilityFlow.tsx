@@ -15,22 +15,18 @@ import { OnboardingContainer } from "./OnboardingContainer";
 import { isEligibleByAge, DOB } from "@/lib/eligibility";
 
 export function EligibilityFlow() {
-  // start at step 1 so we actually see content immediately
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  const [currentStep, setCurrentStep] = useState<number>(1);
 
   const renderStep = () => {
     switch (currentStep) {
-      case 0:
-        return null;
-
       case 1:
         return (
           <StepDOB
             onNext={(dob: DOB) => {
               if (isEligibleByAge(dob, 13)) {
-                setCurrentStep(2); // StepGrade
+                setCurrentStep(2);
               } else {
-                setCurrentStep(6); // StepIneligibleUnder13
+                setCurrentStep(6);
               }
             }}
           />
@@ -69,7 +65,12 @@ export function EligibilityFlow() {
   };
 
   return (
-    <OnboardingContainer currentStep={currentStep} totalSteps={3}>
+    <OnboardingContainer
+      currentStep={currentStep}
+      totalSteps={3}
+      showBack={currentStep > 1}                     // ✅ new
+      onBack={() => setCurrentStep((s) => Math.max(1, s - 1))} // ✅ new
+    >
       {renderStep()}
     </OnboardingContainer>
   );

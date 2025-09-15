@@ -13,12 +13,16 @@ type OnboardingContainerProps = {
   children?: React.ReactNode;
   currentStep?: number;
   totalSteps?: number;
+  showBack?: boolean;      // ✅ new
+  onBack?: () => void;     // ✅ new
 };
 
 export function OnboardingContainer({
   children,
   currentStep = 1,
   totalSteps = 3,
+  showBack = false,        // ✅ default
+  onBack,
 }: OnboardingContainerProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -75,7 +79,12 @@ export function OnboardingContainer({
       {/* Main Content (card + step tracker + step-specific content) */}
       <div className="relative z-3 flex-1 flex flex-col items-center pt-[88px]">
         <OnboardingCard>
-          <StepTracker currentStep={currentStep} totalSteps={totalSteps} />
+          <StepTracker
+            currentStep={currentStep}
+            totalSteps={totalSteps}
+            showBack={showBack}   // ✅ new
+            onBack={onBack}       // ✅ new
+          />
           <div style={{ flex: 1 }}>{children}</div>
         </OnboardingCard>
       </div>

@@ -15,7 +15,7 @@ export function OnboardingCard({
     <div
       className={`onboarding-card w-[90%] max-w-[400px] ${className}`} // 👈 removed absolute + translate
       style={{
-        height: "clamp(500px, 60vh, 560px)",
+        height: "clamp(540px, 65vh, 600px)",
         background: "rgba(18,18,18,0.8)",
         borderRadius: "16px",
         backdropFilter: "blur(14px)",

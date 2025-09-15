@@ -5,7 +5,7 @@ import { DateInput, DateValue } from "@/components/ui/forms/DateInput";
 import { SecondaryCTAButton } from "@/components/ui/actions/SecondaryCTAButton";
 
 type StepDOBProps = {
-  onNext?: () => void;
+  onNext?: (dob: DateValue) => void;
 };
 
 export function StepDOB({ onNext }: StepDOBProps) {
@@ -96,7 +96,7 @@ export function StepDOB({ onNext }: StepDOBProps) {
       {/* Conditional Secondary CTA */}
       <SecondaryCTAButton
         active={!!isValidDOB}
-        onClick={() => isValidDOB && onNext?.()}
+        onClick={() => isValidDOB && onNext?.(dob)}
       >
         Continue
       </SecondaryCTAButton>

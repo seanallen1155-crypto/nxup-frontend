@@ -1,52 +1,148 @@
 "use client";
 
 import { useState } from "react";
-import { PrimaryCTAButton } from "@ui/actions/PrimaryCTAButton";
 
-const grades = ["6th", "7th", "8th", "9th", "10th", "11th", "12th", "College"];
+const gradeOptions = [
+  "Middle School",
+  "9th Grade",
+  "10th Grade",
+  "11th Grade",
+  "12th Grade",
+  "College",
+];
 
-interface StepGradeProps {
-  onNext: () => void;
-}
-
-export function StepGrade({ onNext }: StepGradeProps) {
+export function StepGrade() {
   const [selected, setSelected] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col items-center w-full h-full">
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+      }}
+    >
       {/* Headline */}
-      <h2 className="font-inter font-semibold text-white text-2xl mt-2 text-center">
-        What grade are you in right now? 📚
+      <h2
+        style={{
+          fontFamily: "'Teko', sans-serif",
+          fontWeight: 700,
+          fontSize: "32px",
+          lineHeight: "110%",
+          letterSpacing: "-0.01em",
+          textTransform: "uppercase",
+          color: "#FFFFFF",
+          textShadow: "0px 2px 8px rgba(0,0,0,0.6)",
+          textAlign: "center",
+          marginBottom: "12px",
+        }}
+      >
+        What grade are you in?
       </h2>
 
-      {/* Helper text */}
-      <p className="mt-2 text-md font-medium text-gray-300 text-center max-w-md">
-        Pick your grade (or the one you’re starting) and you’re on your way to building your NIL brand.
+      {/* Subtext */}
+      <p
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 400,
+          fontSize: "16px",
+          lineHeight: "130%",
+          color: "rgba(255,255,255,0.8)",
+          textAlign: "center",
+          maxWidth: "28ch",
+          marginBottom: "20px",
+          alignSelf: "center",
+        }}
+      >
+        Pick your grade and you're on your way to building your NIL brand.
       </p>
 
-      {/* Options */}
-      <div className="mt-8 grid grid-cols-4 gap-4 w-full max-w-md">
-        {grades.map((g) => (
-          <button
-            key={g}
-            onClick={() => setSelected(g)}
-            className={`h-16 flex items-center justify-center rounded-md text-sm transition
-              ${
-                selected === g
-                  ? "border border-green-500 bg-green-100 text-green-800 font-extrabold"
-                  : "bg-gray-800 text-white font-extrabold border border-gray-600 hover:border-green-400"
-              }`}
-          >
-            {g}
-          </button>
-        ))}
-      </div>
+      {/* Grade Options Grid */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, minmax(96px, 1fr))",
+          justifyContent: "center",
+          justifyItems: "center",
+          gap: "12px",
+          marginTop: "24px",
+          marginBottom: "24px",
+          padding: "0 16px",
+        }}
+      >
+        {gradeOptions.map((grade) => {
+          const isSelected = selected === grade;
 
-      {/* Continue */}
-      <div className="mt-10">
-        <PrimaryCTAButton disabled={!selected} onClick={onNext}>
-          Continue
-        </PrimaryCTAButton>
+          return (
+            <button
+              key={grade}
+              onClick={() => setSelected(grade)}
+              style={{
+                minWidth: "96px",
+                width: "100%",
+                height: "56px",
+                borderRadius: "8px",
+                padding: "12px 20px",
+                fontFamily: "'Inter', sans-serif",
+                fontSize: "14px",
+                lineHeight: "18px",
+                textAlign: "center",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                whiteSpace: "normal",
+                position: "relative",
+
+                // State Styles
+                backgroundColor: "rgba(14,14,14,0.7)", // Neutral-900 @ 70%
+                border: isSelected
+                  ? "2px solid rgba(255,255,255,0.2)" // subtle highlight border
+                  : "1px solid #2A2A2A", // Neutral-700 default
+                boxShadow: isSelected
+                  ? "0 0 6px rgba(255,90,31,0.25)" // orange halo
+                  : "none",
+
+                fontWeight: isSelected ? 600 : 500,
+                color: "#FFFFFF",
+              }}
+              onMouseEnter={(e) => {
+                if (!isSelected) {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                    "rgba(26,26,26,0.85)"; // Neutral-800 @ 85%
+                  (e.currentTarget as HTMLButtonElement).style.border =
+                    "1px solid #3A3A3A"; // Neutral-600 hover
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSelected) {
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                    "rgba(14,14,14,0.7)";
+                  (e.currentTarget as HTMLButtonElement).style.border =
+                    "1px solid #2A2A2A";
+                }
+              }}
+            >
+              {grade}
+
+              {/* Optional underline accent when selected */}
+              {isSelected && (
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: "6px",
+                    left: "12px",
+                    right: "12px",
+                    height: "2px",
+                    backgroundColor: "#FF5A1F",
+                    borderRadius: "1px",
+                  }}
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

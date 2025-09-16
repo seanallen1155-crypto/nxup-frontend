@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { OnboardingCard } from "@/components/ui/cards/OnboardingCard";
 import { StepTracker } from "@/components/ui/feedback/StepTracker";
+import { EligibilitySuccessIndicator } from "@/components/ui/feedback/EligibilitySuccessIndicator";
 import OnboardingHeader from "@/components/ui/header/OnboardingHeader";
 import { OnboardingLogo } from "@/components/ui/header/OnboardingLogo";
 import { OnboardingNavMenu } from "@/components/ui/header/OnboardingNavMenu";
@@ -13,15 +14,15 @@ type OnboardingContainerProps = {
   children?: React.ReactNode;
   currentStep?: number;
   totalSteps?: number;
-  showBack?: boolean;      // ✅ new
-  onBack?: () => void;     // ✅ new
+  showBack?: boolean;
+  onBack?: () => void;
 };
 
 export function OnboardingContainer({
   children,
   currentStep = 1,
   totalSteps = 3,
-  showBack = false,        // ✅ default
+  showBack = false,
   onBack,
 }: OnboardingContainerProps) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -76,15 +77,19 @@ export function OnboardingContainer({
         right={<OnboardingNavMenu />}
       />
 
-      {/* Main Content (card + step tracker + step-specific content) */}
+      {/* Main Content (card + tracker/success + step-specific content) */}
       <div className="relative z-3 flex-1 flex flex-col items-center pt-[88px]">
         <OnboardingCard>
-          <StepTracker
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-            showBack={showBack}   // ✅ new
-            onBack={onBack}       // ✅ new
-          />
+          {currentStep === 4 ? ( // ✅ show success icon instead of StepTracker
+            <EligibilitySuccessIndicator />
+          ) : (
+            <StepTracker
+              currentStep={currentStep}
+              totalSteps={totalSteps}
+              showBack={showBack}
+              onBack={onBack}
+            />
+          )}
           <div style={{ flex: 1 }}>{children}</div>
         </OnboardingCard>
       </div>

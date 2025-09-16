@@ -1,72 +1,59 @@
 "use client";
 
-import { useState } from "react";
-import { Input } from "@ui/forms/Input";
-import { PrimaryCTAButton } from "@ui/actions/PrimaryCTAButton";
+import React from "react";
+import { EligibilitySuccessIndicator } from "@/components/ui/feedback/EligibilitySuccessIndicator";
+import { PhoneInput } from "@/components/ui/forms/PhoneInput";
+import { SecondaryCTAButton } from "@/components/ui/actions/SecondaryCTAButton";
 
 interface StepResultsSuccessProps {
-  onNext: () => void;
+  onNext?: () => void;
 }
 
 export function StepResultsSuccess({ onNext }: StepResultsSuccessProps) {
-  const [phone, setPhone] = useState("");
-  const [isValid, setIsValid] = useState(false);
-
-  // Format phone as (XXX) XXX-XXXX
-  const formatPhone = (value: string) => {
-    const digits = value.replace(/\D/g, "").slice(0, 10);
-    const parts: string[] = [];
-    if (digits.length > 0) parts.push("(" + digits.slice(0, 3));
-    if (digits.length >= 4) parts.push(") " + digits.slice(3, 6));
-    if (digits.length >= 7) parts.push("-" + digits.slice(6, 10));
-    return parts.join("");
-  };
-
-  const handleChange = (value: string) => {
-    const formatted = formatPhone(value);
-    setPhone(formatted);
-    setIsValid(formatted.length === 14); // (123) 456-7890
-  };
-
   return (
-    <div className="flex flex-col items-center w-full h-full text-center">
-      {/* Celebration */}
-      <h2 className="font-inter font-semibold text-white text-2xl mt-2">
-        You’re eligible! 🎉
+    <div className="flex flex-col items-center text-center px-4">
+      {/* ✅ Headline */}
+      <h2
+        style={{
+          fontFamily: "'Teko', sans-serif",
+          fontWeight: 600,
+          fontSize: "32px",
+          lineHeight: "110%",
+          letterSpacing: "0.02em",
+          textTransform: "uppercase",
+          color: "#FFFFFF",
+          textShadow: "0px 2px 8px rgba(0,0,0,0.6)",
+          textAlign: "center",
+          marginBottom: "8px",
+        }}
+      >
+        You’re Eligible!
       </h2>
 
-      {/* Prompt */}
-      <h3 className="mt-6 font-inter font-semibold text-white text-xl">
-        Enter your number and we’ll text your link.
-      </h3>
-
-      {/* Helper */}
-      <p className="mt-2 text-md text-gray-300 max-w-md">
-        Check your text messages and click the link to sign into
-        the app and start earning from your NIL brand.
+      {/* ✅ Subtext */}
+      <p
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 400,
+          fontSize: "16px",
+          lineHeight: "130%",
+          color: "rgba(255,255,255,0.8)",
+          textAlign: "center",
+          maxWidth: "28ch",
+          marginBottom: "20px",
+          alignSelf: "center",
+        }}
+      >
+        Enter your number and we’ll text you a secure download link to get started.
       </p>
 
-      {/* Phone Input */}
-      <div className="mt-8 w-full max-w-xs">
-        <Input
-          type="tel"
-          inputMode="numeric"
-          name="phone"
-          id="phone"
-          placeholder="(123) 456-7890"
-          aria-label="Phone Number"
-          value={phone}
-          onChange={(e) => handleChange(e.target.value)}
-          className="text-center tracking-wide"
-        />
-      </div>
+      {/* ✅ Phone Input */}
+      <PhoneInput />
 
-      {/* CTA */}
-      <div className="mt-10">
-        <PrimaryCTAButton disabled={!isValid} onClick={onNext}>
-          Send Me the Link
-        </PrimaryCTAButton>
-      </div>
+      {/* ✅ Secondary CTA */}
+      <SecondaryCTAButton onClick={onNext}>
+        Continue
+      </SecondaryCTAButton>
     </div>
   );
 }

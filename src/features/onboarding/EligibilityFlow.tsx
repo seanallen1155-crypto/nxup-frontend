@@ -15,7 +15,7 @@ import { OnboardingContainer } from "./OnboardingContainer";
 import { isEligibleByAge, DOB } from "@/lib/eligibility";
 
 export function EligibilityFlow() {
-  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentStep, setCurrentStep] = useState<number>(4);
 
   const renderStep = () => {
     switch (currentStep) {

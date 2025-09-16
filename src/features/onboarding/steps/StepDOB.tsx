@@ -42,16 +42,7 @@ export function StepDOB({ onNext }: StepDOBProps) {
       {/* Headline */}
       <h2
         style={{
-          fontFamily: "'Teko', sans-serif",
-          fontWeight: 700,
-          fontSize: "32px",
-          lineHeight: "110%",
-          letterSpacing: "-0.01em",
-          textTransform: "uppercase",
-          color: "#FFFFFF",
-          textShadow: "0px 2px 8px rgba(0,0,0,0.6)",
-          textAlign: "center",
-          marginBottom: "12px",
+          
         }}
       >
         When's your birthday?

@@ -95,6 +95,40 @@ const config: Config = {
           { lineHeight: "var(--typography-line-height-caption)" },
         ],
       },
+      keyframes: {
+        popFlareOnce: {
+          "0%": {
+            transform: "scale(0.9)",
+            filter: "drop-shadow(0 0 10px rgba(34,197,94,0.4))",
+          },
+          "60%": {
+            transform: "scale(1.1)",
+            filter: "drop-shadow(0 0 26px rgba(34,197,94,1))",
+          },
+          "100%": {
+            transform: "scale(1)",
+            filter: "drop-shadow(0 0 16px rgba(34,197,94,0.8))",
+          },
+        },
+        pulseGlow: {
+          "0%, 100%": {
+            filter: "drop-shadow(0 0 10px rgba(34,197,94,0.4))",
+          },
+          "50%": {
+            filter: "drop-shadow(0 0 26px rgba(34,197,94,1))",
+          },
+        },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "20%, 60%": { transform: "translateX(-4px)" },
+          "40%, 80%": { transform: "translateX(4px)" },
+        },
+      },
+      animation: {
+        popFlareOnce: "popFlareOnce 0.35s ease-out forwards",
+        pulseGlow: "pulseGlow 1.5s ease-in-out infinite",
+        shake: "shake 0.4s ease-in-out",
+      },
     },
   },
   plugins: [],

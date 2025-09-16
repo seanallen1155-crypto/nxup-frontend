@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 // Components
 import { PrimaryCTAButton } from "@/components/ui/actions/PrimaryCTAButton";
 import OnboardingHeader from "@/components/ui/header/OnboardingHeader";
+import { OnboardingLogo } from "@/components/ui/header/OnboardingLogo";   // ✅ added
+import { OnboardingNavMenu } from "@/components/ui/header/OnboardingNavMenu"; // ✅ added
 import { BrowserFooter } from "@/components/ui/footer/BrowserFooter";
 
 export default function LandingPage() {
@@ -62,7 +64,10 @@ export default function LandingPage() {
       />
 
       {/* Header (nav + logo + menu) */}
-      <OnboardingHeader />
+      <OnboardingHeader
+        left={<OnboardingLogo />}
+        right={<OnboardingNavMenu />}
+      />
 
       {/* Hero text + CTA */}
       <div

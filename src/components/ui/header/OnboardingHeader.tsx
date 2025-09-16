@@ -1,9 +1,13 @@
 "use client";
 
-import { OnboardingLogo } from "./OnboardingLogo";
-import { OnboardingNavMenu } from "./OnboardingNavMenu";
+import React from "react";
 
-export default function OnboardingHeader() {
+interface OnboardingHeaderProps {
+  left?: React.ReactNode;
+  right?: React.ReactNode;
+}
+
+export default function OnboardingHeader({ left, right }: OnboardingHeaderProps) {
   return (
     <header
       className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-3"
@@ -15,8 +19,8 @@ export default function OnboardingHeader() {
         zIndex: 50,
       }}
     >
-      <OnboardingLogo />
-      <OnboardingNavMenu />
+      <div className="flex items-center">{left}</div>
+      <div className="flex items-center">{right}</div>
     </header>
   );
 }

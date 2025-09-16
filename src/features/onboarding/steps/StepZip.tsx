@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Input } from "@ui/forms/Input";
-import { PrimaryCTAButton } from "@ui/actions/PrimaryCTAButton";
+import { InputDark } from "@/components/ui/forms/InputDark";
+import { SecondaryCTAButton } from "@/components/ui/actions/SecondaryCTAButton";
 
 // Mock zip → state map (extend as needed for testing)
 const mockZipMap: Record<string, string> = {
@@ -39,60 +39,106 @@ export function StepZip({ onNext }: StepZipProps) {
       }
     } else {
       setState(null);
-      setError(null); // Clear error if not complete
+      setError(null);
     }
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full">
-      {/* Motivational Nudge */}
-      <p className="text-sm text-white font-bold mb-2">
-        Last step. You’re almost there.
-      </p>
-
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+      }}
+    >
       {/* Headline */}
-      <h2 className="font-inter font-semibold text-white text-2xl mt-1 text-center">
-        What’s your home zip code? 🧭
+      <h2
+        style={{
+          fontFamily: "'Teko', sans-serif",
+          fontWeight: 600,
+          fontSize: "32px",
+          lineHeight: "110%",
+          letterSpacing: "0.02em",
+          textTransform: "uppercase",
+          color: "#FFFFFF",
+          textShadow: "0px 2px 8px rgba(0,0,0,0.6)",
+          textAlign: "center",
+          marginBottom: "8px",
+        }}
+      >
+        What’s your home zip code?
       </h2>
 
-      {/* Helper text */}
-      <p className="mt-2 text-md font-medium text-gray-300 text-center max-w-md">
+      {/* Subtext */}
+      <p
+        style={{
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: 400,
+          fontSize: "16px",
+          lineHeight: "130%",
+          color: "rgba(255,255,255,0.8)",
+          textAlign: "center",
+          maxWidth: "28ch",
+          marginBottom: "20px",
+          alignSelf: "center",
+        }}
+      >
         This just tells us your state so we can confirm NIL is allowed for you.
       </p>
 
-      {/* Zip input */}
-        <div className="mt-8 w-24 mx-auto">
-        <Input
-            type="text"
-            inputMode="numeric"
-            pattern="\d*"
-            name="zip"
-            id="zip"
-            placeholder="ZIP"
-            aria-label="Zip Code"
-            maxLength={5}
-            value={zip}
-            onChange={(e) => handleZipChange(e.target.value)}
-            className="text-center tracking-widest"
+      {/* Zip Input */}
+      <div style={{ marginTop: "12px", marginBottom: "12px", alignSelf: "center" }}>
+        <InputDark
+          type="text"
+          inputMode="numeric"
+          pattern="\d*"
+          name="zip"
+          id="zip"
+          placeholder="ZIP"
+          aria-label="Zip Code"
+          maxLength={5}
+          value={zip}
+          onChange={(e) => handleZipChange(e.target.value)}
+          className="text-center tracking-widest w-[96px]"
         />
-        </div>
+      </div>
 
-      {/* Inline confirmation */}
+      {/* Inline confirmation / error */}
       {state && (
-        <p className="mt-3 text-green-400 font-semibold">
+        <p
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 500,
+            fontSize: "14px",
+            color: "#34C759",
+            textAlign: "center",
+          }}
+        >
           Got it. Looks like you play in {state}.
         </p>
       )}
       {error && (
-        <p className="mt-3 text-red-400 font-semibold">{error}</p>
+        <p
+          style={{
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: 500,
+            fontSize: "14px",
+            color: "#FF3B30",
+            textAlign: "center",
+          }}
+        >
+          {error}
+        </p>
       )}
 
-      {/* Continue */}
-      <div className="mt-10">
-        <PrimaryCTAButton disabled={!isValidZip || !!error} onClick={onNext}>
-          Continue
-        </PrimaryCTAButton>
-      </div>
+      {/* Continue Button */}
+      <SecondaryCTAButton
+        active={isValidZip && !error}
+        disabled={!isValidZip || !!error}
+        onClick={onNext}
+      >
+        Continue
+      </SecondaryCTAButton>
     </div>
   );
 }

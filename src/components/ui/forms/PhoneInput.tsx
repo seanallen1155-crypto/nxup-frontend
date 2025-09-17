@@ -32,23 +32,40 @@ export function PhoneInput({ value = "", onChange, error }: PhoneInputProps) {
     onChange?.(cleaned);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && digits.length > 0) {
+      const input = e.currentTarget;
+      const pos = input.selectionStart ?? digits.length;
+
+      // If cursor is at start → let default
+      if (pos === 0) return;
+
+      // If cursor is on/after last char, always remove last digit
+      if (pos >= formatPhone(digits).length) {
+        const newDigits = digits.slice(0, -1);
+        setDigits(newDigits);
+        onChange?.(newDigits);
+        e.preventDefault();
+      }
+    }
+  };
+
   return (
-    <div className="w-full mt-4 mb-6"> {/* 16px top, 24px bottom spacing */}
+    <div className="w-full">
       <InputDark
         type="tel"
         inputMode="numeric"
         placeholder="(123) 456-7890"
         value={formatPhone(digits)}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         aria-label="Phone number"
-        className={`${error ? "border-red-500 animate-shake" : ""}`}
+        className={error ? "border-red-500 animate-shake" : ""}
         style={{
-          height: "44px", // ✅ compact input height
-          fontFamily: "'Inter', sans-serif",
-          fontSize: "16px",
-          fontWeight: digits ? 600 : 400,
-          color: digits ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.5)",
+          height: "48px",
+          width: "100%",
         }}
+        filled={digits.length > 0} // ✅ force placeholder vs. user text styling based on raw digits
       />
     </div>
   );

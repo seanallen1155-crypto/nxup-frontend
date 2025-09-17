@@ -20,22 +20,22 @@ export function DateInput({ value, onChange, error }: DateInputProps) {
   const ddRef = useRef<HTMLInputElement>(null);
   const yyyyRef = useRef<HTMLInputElement>(null);
 
-    const handleChange = (
+  const handleChange = (
     field: keyof DateValue,
     raw: string,
     nextRef?: React.RefObject<HTMLInputElement>
-    ) => {
+  ) => {
     const clean = raw.replace(/\D/g, "");
     onChange({ ...value, [field]: clean });
 
     if (
-        (field === "mm" && clean.length === 2 && nextRef?.current) ||
-        (field === "dd" && clean.length === 2 && nextRef?.current) ||
-        (field === "yyyy" && clean.length === 4)
+      (field === "mm" && clean.length === 2 && nextRef?.current) ||
+      (field === "dd" && clean.length === 2 && nextRef?.current) ||
+      (field === "yyyy" && clean.length === 4)
     ) {
-        nextRef?.current?.focus(); // ✅ safe guard
+      nextRef?.current?.focus();
     }
-    };
+  };
 
   const handleBackspace = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -61,7 +61,6 @@ export function DateInput({ value, onChange, error }: DateInputProps) {
     }
   };
 
-  // Field-level errors
   const fieldErrors = {
     mm:
       value.mm.length > 0 &&
@@ -79,12 +78,7 @@ export function DateInput({ value, onChange, error }: DateInputProps) {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        gap: "8px", // ✅ intrinsic spacing
-      }}
-    >
+    <div style={{ display: "flex", gap: "8px", width: "auto" }}>
       {/* MM */}
       <InputDark
         ref={mmRef}
@@ -99,7 +93,8 @@ export function DateInput({ value, onChange, error }: DateInputProps) {
         maxLength={2}
         filled={!!value.mm}
         error={fieldErrors.mm || error}
-        style={{ flexBasis: "20%" }}
+        style={{ width: "8ch" }}
+        textAlign="center"
       />
 
       {/* DD */}
@@ -116,7 +111,8 @@ export function DateInput({ value, onChange, error }: DateInputProps) {
         maxLength={2}
         filled={!!value.dd}
         error={fieldErrors.dd || error}
-        style={{ flexBasis: "20%" }}
+        style={{ width: "8ch" }}
+        textAlign="center"
       />
 
       {/* YYYY */}
@@ -133,7 +129,8 @@ export function DateInput({ value, onChange, error }: DateInputProps) {
         maxLength={4}
         filled={!!value.yyyy}
         error={fieldErrors.yyyy || error}
-        style={{ flexBasis: "60%" }}
+        style={{ width: "10ch" }}
+        textAlign="center"
       />
     </div>
   );

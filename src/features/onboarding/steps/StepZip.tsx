@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { InputDark } from "@/components/ui/forms/InputDark";
+import { ZipInput } from "@/components/ui/forms/ZipInput";
 import { SecondaryCTAButton } from "@/components/ui/actions/SecondaryCTAButton";
 
 // Mock zip → state map (extend as needed for testing)
@@ -88,19 +88,7 @@ export function StepZip({ onNext }: StepZipProps) {
 
       {/* Zip Input */}
       <div style={{ marginTop: "12px", marginBottom: "12px", alignSelf: "center" }}>
-        <InputDark
-          type="text"
-          inputMode="numeric"
-          pattern="\d*"
-          name="zip"
-          id="zip"
-          placeholder="ZIP"
-          aria-label="Zip Code"
-          maxLength={5}
-          value={zip}
-          onChange={(e) => handleZipChange(e.target.value)}
-          className="text-center tracking-widest w-[96px]"
-        />
+        <ZipInput value={zip} onChange={handleZipChange} error={!!error} />
       </div>
 
       {/* Inline confirmation / error */}

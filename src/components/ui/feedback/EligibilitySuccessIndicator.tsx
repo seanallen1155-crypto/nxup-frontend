@@ -11,7 +11,7 @@ export function EligibilitySuccessIndicator() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center mt-7 mb-5 z-10">
+    <div className="flex justify-center items-center z-10">
       {/* ✅ Single Icon with glow + animations */}
       <i
         className={`ri-checkbox-circle-fill text-[40px] text-[#22C55E] ${

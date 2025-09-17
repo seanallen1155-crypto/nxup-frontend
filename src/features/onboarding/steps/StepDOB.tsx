@@ -75,7 +75,9 @@ export function StepDOB({ onNext }: StepDOBProps) {
       </p>
 
       {/* Date Input */}
-      <DateInput value={dob} onChange={setDob} />
+      <div style={{ margin: "0 auto" }}>
+        <DateInput value={dob} onChange={setDob} />
+      </div>
 
       {/* Error helper text */}
       {(errors.mm || errors.dd || errors.yyyy) && (

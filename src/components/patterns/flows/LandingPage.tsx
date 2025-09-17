@@ -111,12 +111,15 @@ export default function LandingPage() {
           Built for all high school athletes to start their NIL journey.
         </p>
 
-        {/* CTA Button */}
-        <div style={{ marginTop: "28px" }}>
-          <PrimaryCTAButton onClick={() => router.push("/onboarding")}>
-            Start my NIL journey
-          </PrimaryCTAButton>
-        </div>
+      {/* CTA Button */}
+      <div style={{ marginTop: "28px" }}>
+        <PrimaryCTAButton
+          active
+          onClick={() => router.push("/onboarding")}
+        >
+          Start my NIL journey
+        </PrimaryCTAButton>
+      </div>
       </div>
 
       {/* Footer */}

@@ -82,6 +82,8 @@ export function OnboardingContainer({
         <OnboardingCard>
           {currentStep === 4 ? ( // ✅ show success icon instead of StepTracker
             <EligibilitySuccessIndicator />
+          ) : currentStep === 5 ? ( // ✅ Final Exit uses larger icon
+            <EligibilitySuccessIndicator size={48} />
           ) : (
             <StepTracker
               currentStep={currentStep}

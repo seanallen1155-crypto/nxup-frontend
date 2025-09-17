@@ -3,11 +3,9 @@
 import React from "react";
 import "remixicon/fonts/remixicon.css";
 
-type PrimaryCTAButtonProps = {
-  children: React.ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
+type PrimaryCTAButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean;
+  disabled?: boolean;
   icon?: React.ReactNode;
   iconClassName?: string;
 };
@@ -19,6 +17,8 @@ export function PrimaryCTAButton({
   active = false,
   icon,
   iconClassName,
+  className,
+  ...rest
 }: PrimaryCTAButtonProps) {
   const isInactive = !active && !disabled;
   const isActive = active && !disabled;
@@ -27,7 +27,7 @@ export function PrimaryCTAButton({
     <button
       onClick={onClick}
       disabled={disabled}
-      className="flex items-center justify-center gap-2 rounded-md"
+      className={`flex items-center justify-center gap-2 rounded-md ${className || ""}`}
       style={{
         height: "48px",
         width: "100%",
@@ -40,30 +40,22 @@ export function PrimaryCTAButton({
         textTransform: "uppercase",
         transition:
           "background 0.2s ease-in-out, border-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-        cursor: disabled
-          ? "default"
-          : isInactive
-          ? "default"
-          : "pointer",
-        // Backgrounds
+        cursor: disabled ? "default" : isInactive ? "default" : "pointer",
         background: disabled
           ? "rgba(255,255,255,0.10)"
           : isInactive
           ? "rgba(255,255,255,0.10)"
           : "linear-gradient(90deg, #FF5A1F 0%, #E64500 100%)",
-        // Borders
         border: disabled
           ? "1px solid rgba(255,255,255,0.18)"
           : isInactive
           ? "1px solid rgba(255,255,255,0.18)"
           : "none",
-        // Typography
         color: disabled
           ? "rgba(255,255,255,0.32)"
           : isInactive
           ? "rgba(255,255,255,0.44)"
           : "#FFFFFF",
-        // Shadows
         boxShadow: disabled
           ? "none"
           : isInactive
@@ -75,8 +67,7 @@ export function PrimaryCTAButton({
         if (isActive) {
           e.currentTarget.style.background =
             "linear-gradient(90deg, #FF7A3F 0%, #FF5A1F 100%)";
-          e.currentTarget.style.boxShadow =
-            "0 0 8px rgba(255,90,31,0.4)";
+          e.currentTarget.style.boxShadow = "0 0 8px rgba(255,90,31,0.4)";
         }
       }}
       onMouseLeave={(e) => {
@@ -100,8 +91,7 @@ export function PrimaryCTAButton({
         if (isActive) {
           e.currentTarget.style.background =
             "linear-gradient(90deg, #FF7A3F 0%, #FF5A1F 100%)";
-          e.currentTarget.style.boxShadow =
-            "0 0 8px rgba(255,90,31,0.4)";
+          e.currentTarget.style.boxShadow = "0 0 8px rgba(255,90,31,0.4)";
         }
       }}
       // Focus ring (active only)
@@ -114,6 +104,7 @@ export function PrimaryCTAButton({
       onBlur={(e) => {
         e.currentTarget.style.outline = "none";
       }}
+      {...rest}
     >
       {children}
       {icon ? (

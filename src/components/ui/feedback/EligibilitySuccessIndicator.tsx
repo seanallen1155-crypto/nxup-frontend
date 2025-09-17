@@ -3,7 +3,13 @@
 import React, { useEffect, useState } from "react";
 import "remixicon/fonts/remixicon.css";
 
-export function EligibilitySuccessIndicator() {
+interface EligibilitySuccessIndicatorProps {
+  size?: number; // size in px, default 40
+}
+
+export function EligibilitySuccessIndicator({
+  size = 40,
+}: EligibilitySuccessIndicatorProps) {
   const [entered, setEntered] = useState(false);
 
   useEffect(() => {
@@ -12,11 +18,12 @@ export function EligibilitySuccessIndicator() {
 
   return (
     <div className="flex justify-center items-center z-10">
-      {/* ✅ Single Icon with glow + animations */}
+      {/* ✅ Inline fontSize ensures size works correctly */}
       <i
-        className={`ri-checkbox-circle-fill text-[40px] text-[#22C55E] ${
+        className={`ri-checkbox-circle-fill ${
           entered ? "animate-popFlareOnce" : ""
         } animate-pulseGlow`}
+        style={{ color: "#2ECC71", fontSize: `${size}px` }}
         aria-hidden="true"
       />
     </div>

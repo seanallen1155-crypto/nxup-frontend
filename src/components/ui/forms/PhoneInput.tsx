@@ -33,18 +33,17 @@ export function PhoneInput({ value = "", onChange, error }: PhoneInputProps) {
   };
 
   return (
-    <div className="w-full mt-6 mb-6">
+    <div className="w-full mt-4 mb-6"> {/* 16px top, 24px bottom spacing */}
       <InputDark
         type="tel"
         inputMode="numeric"
-        placeholder="Enter phone number"
+        placeholder="(123) 456-7890"
         value={formatPhone(digits)}
         onChange={handleChange}
         aria-label="Phone number"
-        className={`h-[52px] text-[16px] ${
-          error ? "border-red-500 animate-shake" : ""
-        }`}
+        className={`${error ? "border-red-500 animate-shake" : ""}`}
         style={{
+          height: "44px", // ✅ compact input height
           fontFamily: "'Inter', sans-serif",
           fontSize: "16px",
           fontWeight: digits ? 600 : 400,

@@ -84,7 +84,7 @@ export function OnboardingContainer({
             <EligibilitySuccessIndicator />
           ) : currentStep === 5 ? ( // ✅ Final Exit uses larger icon
             <EligibilitySuccessIndicator size={48} />
-          ) : (
+          ) : currentStep === 6 ? null : ( // ✅ hide tracker for ineligible under 13
             <StepTracker
               currentStep={currentStep}
               totalSteps={totalSteps}

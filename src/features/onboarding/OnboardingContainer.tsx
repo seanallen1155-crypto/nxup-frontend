@@ -80,18 +80,18 @@ export function OnboardingContainer({
       {/* Main Content (card + tracker/success + step-specific content) */}
       <div className="relative z-3 flex-1 flex flex-col items-center pt-[88px]">
         <OnboardingCard>
-        {currentStep === 4 ? (
-          <EligibilitySuccessIndicator />
-        ) : currentStep === 5 ? (
-          <EligibilitySuccessIndicator size={48} />
-        ) : [6, 7, 8, 9, 10].includes(currentStep) ? null : ( // ✅ hide tracker for all ineligible steps
-          <StepTracker
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-            showBack={showBack}
-            onBack={onBack}
-          />
-        )}
+          {currentStep === 4 ? (
+            <EligibilitySuccessIndicator />
+          ) : currentStep === 5 || currentStep === 10 ? ( // ✅ show green icon on 5 & 10
+            <EligibilitySuccessIndicator size={48} />
+          ) : [6, 7, 8, 9].includes(currentStep) ? null : ( // ✅ hide tracker only on 6–9
+            <StepTracker
+              currentStep={currentStep}
+              totalSteps={totalSteps}
+              showBack={showBack}
+              onBack={onBack}
+            />
+          )}
           <div style={{ flex: 1 }}>{children}</div>
         </OnboardingCard>
       </div>

@@ -7,13 +7,14 @@ import { StepGrade } from "./steps/StepGrade";
 import { StepZip } from "./steps/StepZip";
 import { StepResultsSuccess } from "./steps/StepResultsSuccess";
 import { StepFinalExit } from "./steps/StepFinalExit";
-import { StepIneligible } from "./steps/StepIneligible"; // ✅ new unified ineligible step
+import { StepIneligibleUnder13 } from "./steps/StepIneligibleUnder13"; // ✅ restored
+import { StepIneligible } from "./steps/StepIneligible"; // ✅ unified for grade/state/college
 import { StepIneligibleExit } from "./steps/StepIneligibleExit";
 import { OnboardingContainer } from "./OnboardingContainer";
 import { isEligibleByAge, DOB } from "@/lib/eligibility";
 
 export function EligibilityFlow() {
-  const [currentStep, setCurrentStep] = useState<number>(6);
+  const [currentStep, setCurrentStep] = useState<number>(10);
 
   const renderStep = () => {
     switch (currentStep) {
@@ -43,12 +44,18 @@ export function EligibilityFlow() {
         return <StepFinalExit />;
 
       case 6: // Under 13
-      case 7: // Not HS
-      case 8: // College
-      case 9: // State
-        return <StepIneligible />; // ✅ blank for now
+        return <StepIneligibleUnder13 />;
 
-      case 10:
+      case 7: // Not HS (grade)
+        return <StepIneligible reason="grade" onNext={() => setCurrentStep(10)} />;
+
+      case 8: // College
+        return <StepIneligible reason="college" onNext={() => setCurrentStep(10)} />;
+
+      case 9: // State
+        return <StepIneligible reason="state" onNext={() => setCurrentStep(10)} />;
+
+      case 10: // Exit (after form submission)
         return <StepIneligibleExit />;
 
       default:

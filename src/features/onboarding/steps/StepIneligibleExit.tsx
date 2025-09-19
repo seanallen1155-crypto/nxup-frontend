@@ -1,25 +1,40 @@
+// src/features/onboarding/steps/StepIneligibleExit.tsx
 "use client";
-
-import { Hourglass } from "lucide-react";
 
 export function StepIneligibleExit() {
   return (
-    <div className="flex flex-col items-center w-full h-full text-center pt-[6vh] px-4">
-      {/* Hero / Headline */}
-      <h2 className="m-0 font-inter font-black text-white text-2xl leading-snug max-w-[90%]">
-        All set. We’ve got your number.
+    <div className="flex flex-col items-center text-center px-4 w-full pb-8">
+      {/* ✅ Headline */}
+      <h2
+        style={{
+          fontFamily: "'Satoshi', sans-serif",
+          fontWeight: 700,
+          fontSize: "22px",
+          lineHeight: "28px",
+          color: "#FFFFFF",
+          textAlign: "center",
+          marginTop: "36px",   // ✅ identical spacing to StepFinalExit
+          marginBottom: "20px",
+        }}
+      >
+        All set.<wbr /> We’ve got your number.
       </h2>
 
-      {/* Big Waitlist Icon */}
-      <Hourglass
-        className="mt-6 h-20 w-20 text-white"
-        strokeWidth={2}
-      />
-
-      {/* Subline */}
-      <p className="m-0 mt-6 text-base text-[#EAEAEA] max-w-[90%] leading-relaxed">
-        We’ll keep your spot warm. As soon as you’re eligible, you’ll get a text
-        with your app link.
+      {/* ✅ Supporting Copy */}
+      <p
+        style={{
+          fontFamily: "'Satoshi', sans-serif",
+          fontWeight: 400,
+          fontSize: "15px",
+          lineHeight: "22px",
+          color: "#A0A0A0",
+          textAlign: "center",
+          maxWidth: "38ch",
+          marginBottom: "24px", // ✅ matches StepFinalExit spacing
+        }}
+      >
+        We’ll keep your spot warm. As soon as you’re eligible for NIL Journey,
+        we’ll text you a link with your login to the app.
       </p>
     </div>
   );

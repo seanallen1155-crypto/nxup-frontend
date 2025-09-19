@@ -1,3 +1,4 @@
+// src/features/onboarding/EligibilityFlow.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,10 +7,7 @@ import { StepGrade } from "./steps/StepGrade";
 import { StepZip } from "./steps/StepZip";
 import { StepResultsSuccess } from "./steps/StepResultsSuccess";
 import { StepFinalExit } from "./steps/StepFinalExit";
-import { StepIneligibleUnder13 } from "./steps/StepIneligibleUnder13";
-import { StepIneligibleNotHS } from "./steps/StepIneligibleNotHS";
-import { StepIneligibleCollege } from "./steps/StepIneligibleCollege";
-import { StepIneligibleState } from "./steps/StepIneligibleState";
+import { StepIneligible } from "./steps/StepIneligible"; // ✅ new unified ineligible step
 import { StepIneligibleExit } from "./steps/StepIneligibleExit";
 import { OnboardingContainer } from "./OnboardingContainer";
 import { isEligibleByAge, DOB } from "@/lib/eligibility";
@@ -44,17 +42,11 @@ export function EligibilityFlow() {
       case 5:
         return <StepFinalExit />;
 
-      case 6:
-        return <StepIneligibleUnder13 />;
-
-      case 7:
-        return <StepIneligibleNotHS onNext={() => setCurrentStep(10)} />;
-
-      case 8:
-        return <StepIneligibleCollege onNext={() => setCurrentStep(10)} />;
-
-      case 9:
-        return <StepIneligibleState onNext={() => setCurrentStep(10)} />;
+      case 6: // Under 13
+      case 7: // Not HS
+      case 8: // College
+      case 9: // State
+        return <StepIneligible />; // ✅ blank for now
 
       case 10:
         return <StepIneligibleExit />;
@@ -68,8 +60,8 @@ export function EligibilityFlow() {
     <OnboardingContainer
       currentStep={currentStep}
       totalSteps={3}
-      showBack={currentStep > 1}                     // ✅ new
-      onBack={() => setCurrentStep((s) => Math.max(1, s - 1))} // ✅ new
+      showBack={currentStep > 1}
+      onBack={() => setCurrentStep((s) => Math.max(1, s - 1))}
     >
       {renderStep()}
     </OnboardingContainer>

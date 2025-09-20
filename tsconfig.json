@@ -3,47 +3,72 @@
     "target": "ESNext",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowJs": true,
     "strict": false,
-
     "baseUrl": ".",
     "paths": {
-      "theme": ["./theme.ts"],
-      "@/typography": ["./src/components/ui/typography.tsx"],
-      "@/icons/*": ["public/icons/*"],
-      "@/*": ["src/*"],
-      "@ui/*": ["src/components/ui/*"],
-      "@patterns/*": ["src/components/patterns/*"],
-      "@features/*": ["src/features/*"],
-      "@constants/*": ["src/constants/*"],
-      "@lib/*": ["src/lib/*"],
-      "@styles/*": ["src/styles/*"]
+      "theme": [
+        "./theme.ts"
+      ],
+      "@/typography": [
+        "./src/components/ui/typography.tsx"
+      ],
+      "@/icons/*": [
+        "public/icons/*"
+      ],
+      "@/*": [
+        "src/*"
+      ],
+      "@ui/*": [
+        "src/components/ui/*"
+      ],
+      "@patterns/*": [
+        "src/components/patterns/*"
+      ],
+      "@features/*": [
+        "src/features/*"
+      ],
+      "@constants/*": [
+        "src/constants/*"
+      ],
+      "@lib/*": [
+        "src/lib/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ]
     },
-
-    "types": ["node", "tailwindcss"],
-
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "types": [
+      "react",
+      "react-dom",
+      "node",
+      "tailwindcss"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "noEmit": true,
     "incremental": true,
     "jsx": "preserve",
-
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
-
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

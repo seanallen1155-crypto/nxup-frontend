@@ -1,87 +1,105 @@
 "use client";
 
-import React, { forwardRef, InputHTMLAttributes } from "react";
+import React, {
+  InputHTMLAttributes,
+  useState,
+  forwardRef,
+  useEffect,
+  useRef,
+} from "react";
 import clsx from "clsx";
 
-type InputVariant = "default" | "parent";
-type InputFieldSize = "sm" | "md" | "lg";
-
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
-  className?: string;
-  value?: string;
-  variant?: InputVariant;
-  fieldSize?: InputFieldSize;
-  hasError?: boolean;
+interface InputLightProps extends InputHTMLAttributes<HTMLInputElement> {
+  state?: "default" | "error" | "success";
+  context?: "athlete" | "parent";
+  align?: "left" | "center";
 }
 
-export const InputLight = forwardRef<HTMLInputElement, InputProps>(
+export const InputLight = forwardRef<HTMLInputElement, InputLightProps>(
   (
     {
-      className = "",
+      state = "default",
+      context = "parent",
+      disabled = false,
+      align = "left",
+      className,
+      style,
       value,
-      variant = "default",
-      fieldSize = "md",
-      hasError = false,
       ...props
     },
     ref
   ) => {
-    const hasValue = value !== undefined && value !== "";
+    const [focused, setFocused] = useState(false);
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
-    // Base + typography
-    const baseClasses =
-      "w-full rounded-md transition-colors duration-200";
-    const typography =
-      "placeholder-gray-400 placeholder:font-normal";
+    // Expose forwarded ref
+    useEffect(() => {
+      if (typeof ref === "function") {
+        ref(inputRef.current);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLInputElement | null>).current =
+          inputRef.current;
+      }
+    }, [ref]);
 
-    // Size scaling
-    const sizeClasses =
-      fieldSize === "sm"
-        ? "px-2 py-1 text-sm"
-        : fieldSize === "lg"
-        ? "px-0 py-0 text-center text-2xl leading-none font-medium"
-        : "px-4 py-2 text-base font-semibold";
+    // Base styles
+    const baseStyles: React.CSSProperties = {
+      height: "48px",
+      width: "100%",
+      borderRadius: "4px",
+      backgroundColor: disabled ? "#E0E0E0" : "#FAFAFA",
+      border: "1px solid #E0E0E0",
+      boxShadow: disabled ? "none" : "0px 1px 2px rgba(0,0,0,0.05)",
+      padding: align === "center" ? "0" : "0 14px",
+      fontFamily: align === "center" ? "monospace" : "'Satoshi', sans-serif",
+      fontSize: "16px",
+      lineHeight: "24px",
+      fontWeight: value ? 500 : 400, // bold if filled
+      color: disabled ? "#666666" : "#1A1A1A",
+      textAlign: align,
+      outline: "none",
+      transition: "all 0.2s ease",
+    };
 
-    let variantClasses = "";
+    // Placeholder styling (inline trick)
+    const placeholderColor = "#8C8C8C"; // gray.450
 
-    if (variant === "default") {
-      variantClasses = clsx(
-        "bg-white text-gray-900",
-        hasValue
-          ? "border border-brand-primary"
-          : "border border-gray-300 hover:border-brand-primary",
-        "focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-brand-primary"
-      );
-    }
-
-    if (variant === "parent") {
-      if (hasError) {
-        variantClasses = clsx(
-          "bg-parent-error-bg text-parent-error-text",
-          "border border-parent-error-border",
-          "focus:outline-none focus:ring-2 focus:ring-parent-error-border focus:border-parent-error-border"
-        );
-      } else if (hasValue) {
-        variantClasses = clsx(
-          "bg-parent-teal-bgActive text-parent-teal-text",
-          "border border-parent-teal-border",
-          "focus:outline-none focus:ring-2 focus:ring-parent-teal-border focus:border-parent-teal-border"
-        );
+    // State-specific overrides
+    if (state === "error") {
+      baseStyles.border = "1px solid #B3261E";
+      baseStyles.boxShadow = "0px 0px 6px rgba(179,38,30,0.4)";
+    } else if (state === "success") {
+      baseStyles.border = "1px solid #176B4D";
+      baseStyles.boxShadow = "0px 0px 6px rgba(23,107,77,0.4)";
+    } else if (focused && !disabled) {
+      if (context === "athlete") {
+        baseStyles.border = "1px solid #FF5A1F";
+        baseStyles.boxShadow =
+          "0px 0px 6px rgba(255,90,31,0.4), 0 0 6px rgba(230,69,0,0.4)";
       } else {
-        variantClasses = clsx(
-          "bg-parent-teal-bgInactive text-gray-700",
-          "border border-transparent",
-          "focus:outline-none focus:ring-2 focus:ring-parent-teal-border focus:border-parent-teal-border"
-        );
+        baseStyles.border = "1px solid #1E2A5E";
+        baseStyles.boxShadow =
+          "0px 0px 6px rgba(30,42,94,0.35), 0 0 6px rgba(36,61,138,0.35)";
       }
     }
 
     return (
       <input
-        ref={ref}
-        value={value}
-        className={clsx(baseClasses, typography, sizeClasses, variantClasses, className)}
         {...props}
+        ref={inputRef}
+        disabled={disabled}
+        style={{ ...baseStyles, ...style }}
+        className={clsx("outline-none", className)}
+        value={value}
+        placeholder={props.placeholder}
+        onFocus={(e) => {
+          setFocused(true);
+          props.onFocus?.(e);
+        }}
+        onBlur={(e) => {
+          setFocused(false);
+          props.onBlur?.(e);
+        }}
       />
     );
   }

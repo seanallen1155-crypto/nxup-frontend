@@ -26,7 +26,7 @@ export function ParentPrimaryCTA({
         lineHeight: "22px",
         letterSpacing: "0.2px",
         color: disabled ? "#A0A0A0" : "#FFFFFF",
-        textTransform: "none",
+        textTransform: "none", // sentence case
         padding: "16px 20px",
         minHeight: "44px",
         width: "100%",
